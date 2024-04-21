@@ -1,0 +1,17 @@
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": "*.cpp",
+      "options": {
+        "printWidth": 4,
+        "parser": "cpp",
+        "arrowParens": "avoid",
+        "singleQuote": true,
+        "trailingComma": "none",
+        "bracketSpacing": true
+      }
+    }
+  ]
+}

@@ -1,27 +1,29 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <string.h>
-#include <ctime>
-#include <random>
+
 #include <algorithm>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <random>
+#include <vector>
 
 #include "camellia.h"
 
 #define DEFAULT_KEY_FILE "key.bin"
 #define DEFAULT_SIZE_FILE "size.bin"
 
-using namespace::std;
+using namespace ::std;
 
 vector<uint8_t> read(string filename) {
     ifstream myfile(filename, ios::binary);
-    vector<uint8_t> data((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>());
+    vector<uint8_t> data((istreambuf_iterator<char>(myfile)),
+                         istreambuf_iterator<char>());
     myfile.close();
     return data;
 }
 
 void hexdump(vector<uint8_t> data_vec) {
-    uint8_t data[data_vec.size()];
+    uint8_t *data = new uint8_t[data_vec.size()];
     copy(data_vec.begin(), data_vec.end(), data);
 
     uint32_t width = 0;
@@ -44,13 +46,13 @@ vector<uint8_t> search_for_key(int key_len) {
     if (DEFAULT_KEY_FILE) {
         key = read(DEFAULT_KEY_FILE);
     }
-    
+
     return key;
 }
 
 void save_to(vector<uint8_t> data, string output_filename, int size) {
     ofstream outfile(output_filename, ios::out | ios::binary);
-    if(size != 0) { 
+    if (size != 0) {
         outfile.write((char *)&data[0], size);
     } else {
         outfile.write((char *)&data[0], data.size());
@@ -71,7 +73,7 @@ vector<uint8_t> generate_key(int key_len) {
 
 vector<uint8_t> encrypt(vector<uint8_t> &data, vector<uint8_t> &key) {
     uint8_t ekey[272] = {0};
-    uint8_t ukey[key.size()];
+    uint8_t *ukey = new uint8_t[key.size()];
     uint32_t keysize = key.size() * 8;
 
     copy(key.begin(), key.end(), ukey);
@@ -94,7 +96,7 @@ vector<uint8_t> encrypt(vector<uint8_t> &data, vector<uint8_t> &key) {
 
 vector<uint8_t> decrypt(vector<uint8_t> &data, vector<uint8_t> &key) {
     uint8_t ekey[272] = {0};
-    uint8_t ukey[key.size()];
+    uint8_t *ukey = new uint8_t[key.size()];
     uint32_t keysize = key.size() * 8;
 
     copy(key.begin(), key.end(), ukey);
@@ -125,7 +127,7 @@ int main(int argc, char **argv) {
     // key and size of a file
     // we read from 2 files
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    if(argc < 4){
+    if (argc < 4) {
         cout << "Incorrect entry data" << endl;
         return 1;
     }
@@ -138,17 +140,17 @@ int main(int argc, char **argv) {
 
     cout << data.size() << endl;
 
-    if(!strcmp(argv[1], "encrypt")) {
+    if (!strcmp(argv[1], "encrypt")) {
         int key_len = atoi(argv[4]);
-        if(key_len % 8 != 0 || key_len > 32) {
-            cout << "Uncorrect key lenght\n"<<
-            "Generated 128-bit key" << endl;
-            key_len = 16;   // if uncorrect key_len we gen the min len
+        if (key_len % 8 != 0 || key_len > 32) {
+            cout << "Uncorrect key lenght\n"
+                 << "Generated 128-bit key" << endl;
+            key_len = 16;  // if uncorrect key_len we gen the min len
         }
 
         ifstream iff(DEFAULT_KEY_FILE);
         iff.seekg(0, ios::end);
-        if(!iff || iff.tellg() != key_len) {
+        if (!iff || iff.tellg() != key_len) {
             cout << "gen key" << endl;
             key = generate_key(key_len);
             save_to(key, DEFAULT_KEY_FILE, 0);
@@ -169,18 +171,19 @@ int main(int argc, char **argv) {
         save_to(encrypted, output_file, 0);
         // -_-_-_-_-_-_-_-_-_-_-_-_-_-_
         cout << "Encoded to: " + output_file << endl;
-    } else if(!strcmp(argv[1], "decrypt")) {
+    } else if (!strcmp(argv[1], "decrypt")) {
         int key_len = atoi(argv[4]);
-        if(key_len % 8 != 0 || key_len > 32) {
+        if (key_len % 8 != 0 || key_len > 32) {
             cout << "Uncorrect key length" << endl;
             return -1;
         }
 
         key = search_for_key(key_len);
-        if(key.empty()) {
-            cout << "Key not found by default path\n"<<
-            "Please create a " << DEFAULT_KEY_FILE << " whith correct key!" << endl;
-            return -1; 
+        if (key.empty()) {
+            cout << "Key not found by default path\n"
+                 << "Please create a " << DEFAULT_KEY_FILE
+                 << " whith correct key!" << endl;
+            return -1;
         }
 
         int size;
@@ -191,7 +194,7 @@ int main(int argc, char **argv) {
         vector<uint8_t> decrypted = decrypt(data, key);
         string output_file = argv[3];
         save_to(decrypted, output_file, size);
-        cout << "Decrypted to: " + output_file << endl;      
+        cout << "Decrypted to: " + output_file << endl;
     } else {
         cout << "Incorrect option" << endl;
     }
