@@ -4,20 +4,23 @@
 #include <iostream>
 #include <vector>
 
-#include "../utils/kuznechik.cpp"
-#include "constants.h"
+#include "../interface/constants.h"
+#include "../kuznechik.cpp"
+
+#ifndef KEY_GEN
+#define KEY_GEN
 
 using namespace std;
 
 /**
- * @details keygen class
+ * @details KeyGen class
  *
  * @public only one function: generateRoundKeys(...)
  */
-class kuzKeyGen {
+class KeyGen {
    private:
     /**
-     * counting constant values for clc ulating round keys
+     * counting constant values for calculating round keys
      */
     vector<vector<uint8_t>> constant() {
         vector<vector<uint8_t>> constants(32, vector<uint8_t>(KUZ_CONST::BLOCK_SIZE));
@@ -36,7 +39,7 @@ class kuzKeyGen {
 
     /**
      * @details runs Feistel transformation for master key
-     * to gen round keys (whichj amount eq to ROUNDS_AMOUNT constant)
+     * to gen round keys (which amount eq to ROUNDS_AMOUNT constant)
      */
     vector<vector<uint8_t>> feistelTransform(vector<uint8_t> in_lKey, vector<uint8_t> in_rKey, vector<uint8_t> iterKonst) {
         vector<uint8_t> internal;
@@ -94,8 +97,11 @@ class kuzKeyGen {
             exit(1);
         }
 
-        vector<uint8_t> masteKey(KUZ_CONST::MASTER_KEY_BITES);
-        for (size_t i = 0; i < KUZ_CONST::MASTER_KEY_BITES; i++) {
+        // move the reading pointer to position eq fileShift
+        file.seekg(fileShift, ios::beg);
+
+        vector<uint8_t> masteKey(KUZ_CONST::MASTER_KEY_BYTES);
+        for (size_t i = 0; i < KUZ_CONST::MASTER_KEY_BYTES; i++) {
             uint8_t value = 0;
             for (int j = 0; j < 8; j++) {
                 char bit;
@@ -127,9 +133,11 @@ class kuzKeyGen {
     vector<vector<uint8_t>> generateRoundKeys(const string& filename, size_t fileShift = 0) {
         vector<uint8_t> masterKey = readKey(filename, fileShift);
 
-        vector<uint8_t> leftHalf(masterKey.begin(), masterKey.begin() + KUZ_CONST::MASTER_KEY_BITES / 2);
-        vector<uint8_t> rightHalf(masterKey.begin() + KUZ_CONST::MASTER_KEY_BITES / 2, masterKey.end());
+        vector<uint8_t> leftHalf(masterKey.begin(), masterKey.begin() + KUZ_CONST::MASTER_KEY_BYTES / 2);
+        vector<uint8_t> rightHalf(masterKey.begin() + KUZ_CONST::MASTER_KEY_BYTES / 2, masterKey.end());
 
         return expandKey(leftHalf, rightHalf);
     }
 };
+
+#endif
