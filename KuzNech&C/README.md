@@ -4,6 +4,7 @@ To compile use (I got 6.3 minGW32 compiler version):
 `g++ ofb.cpp -o kuz.exe`
 
 To run the compiled file you need:
+
 `-f` - specifies that the next parameter is the path to your file that you want to encrypt.
 
 `-k` - specifies that the next parameter is the path to the file with the bit sequence (minimum 256 bits) for the encryption key.
