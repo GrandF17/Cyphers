@@ -1,0 +1,4 @@
+Date: [2024-04-26 21:03:59]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-04-26 21:03:59]  Log: Executable integrity is checked!
+Date: [2024-04-26 21:03:59]  Log: File ./kek.txt encrypting...
+Date: [2024-04-26 21:03:59]  Log: Ecrypted to: 5e56c1aeb79edb7538b12218bd625105.ENC
