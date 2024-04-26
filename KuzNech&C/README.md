@@ -1,7 +1,6 @@
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
-To compile use (I got 6.3 minGW32 compiler version):
-`g++ ofb.cpp -o kuz.exe`
+To compile use (I got 6.3 minGW32 compiler version): `g++ .\ofb.cpp .\libraries\md5.cpp -o main`
 
 To run the compiled file you need:
 
