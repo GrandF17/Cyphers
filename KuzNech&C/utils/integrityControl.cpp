@@ -15,7 +15,7 @@ string fileContentToString(const string& filename) {
     string content;
     string line;
     while (getline(file, line)) {
-        content += line + "\n";  // Add newline character if needed
+        content += line;  // Add newline character if needed
     }
 
     file.close();
@@ -25,22 +25,30 @@ string fileContentToString(const string& filename) {
 void createReferenceFile(char** argv, class Logger* logger) {
     string hashtext = md5(fileContentToString(argv[0]));
 
-    ofstream hashfile("./ref_hash", ios::binary);
+    ofstream hashfile("./checksum.dat", ios::binary);
     hashfile << hashtext;
     hashfile.close();
-    logger->log({"Executable file checksum was written to ./ref_hash!"});
+    logger->log({"Executable file checksum was written to ./checksum.dat!"});
 }
 
 void checkExecutableHash(char** argv, class Logger* logger) {
-    string reftext = md5(fileContentToString("./ref_hash"));
+    string reftext = fileContentToString("./checksum.dat");
     string hashtext = md5(fileContentToString(argv[0]));
 
-    for (size_t i = 0; i < reftext.size(); i++) {
-        if (reftext[i] != hashtext[i]) {
-            logger->log({"Executable integrity is broken, aborting!"});
-            throw std::runtime_error("Executable integrity is broken, aborting!");
-            exit(1);
-        }
+    /**
+     * 1 - means that second string stands right from first string after sort
+     * 0 - both second and first strings appears on equal places after sort
+     * -1 - means that second string stands left from first string after sort
+     *
+     * simplifying:
+     * a < b
+     * a == a
+     * c > b
+     */
+    if (reftext.compare(hashtext) != 0) {
+        logger->log({"Executable integrity is broken, aborting!"});
+        throw runtime_error("Executable integrity is broken, aborting!");
+        exit(1);
     }
 
     logger->log({"Executable integrity is checked!"});

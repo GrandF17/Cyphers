@@ -40,16 +40,20 @@ class ArgParam {
  */
 class ProgramParams {
    public:
-    ArgParam<string>* logFile;
+    ArgParam<size_t>* mode;
     ArgParam<string>* file;
     ArgParam<string>* key;
     ArgParam<size_t>* offset;
+    ArgParam<string>* logFile;
+    ArgParam<bool>* countChecksum;
 
     ProgramParams()
-        : logFile(new ArgParam<string>(regex("--l=([^\"]*)"))),
+        : mode(new ArgParam<size_t>(regex("--mode=([^\"]*)"))),
           file(new ArgParam<string>(regex("--f=([^\"]*)"))),
           key(new ArgParam<string>(regex("--k=([^\"]*\\.key)"))),
-          offset(new ArgParam<size_t>(regex("--o=([^\"]*)"))) {}
+          offset(new ArgParam<size_t>(regex("--o=([^\"]*)"))),
+          logFile(new ArgParam<string>(regex("--l=([^\"]*)"))),
+          countChecksum(new ArgParam<bool>(regex("--checksum=([^\"]*)"))) {}
 
     ~ProgramParams() {
         delete logFile;

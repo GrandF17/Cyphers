@@ -1,6 +1,5 @@
 #include <stdarg.h>
 #include <string.h>
-#include <time.h>
 
 #include <cstdint>
 #include <cstdio>
@@ -9,9 +8,10 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
+
+#include "../utils/time.cpp"
 
 using namespace std;
 
@@ -22,14 +22,6 @@ class Logger {
    private:
     ofstream* file;  // file where logs will be written
     bool quietMod;   // true - logs to console, else - not
-
-    void printBlock(vector<uint8_t> block) {
-        cout << hex << setfill('0');
-        for (const auto& byte : block) {
-            cout << setw(2) << static_cast<int>(byte);
-        }
-        cout << endl;
-    }
 
    public:
     /**
@@ -64,13 +56,10 @@ class Logger {
 
         // writing vector of string to file
         for (auto log : logs) {
-            time_t now = time(0);
-            tm* localTime = localtime(&now);
-            char timeString[80];
-            strftime(timeString, 80, "[%Y-%m-%d %X] ", localTime);
+            string time = dateString();
 
-            if (!quietMod) cout << "Date: " << timeString << " Log: " << log << endl;
-            *file << "Date: " << timeString << " Log: " << log << endl;
+            if (!quietMod) cout << "Date: " << time << " Log: " << log << endl;
+            *file << "Date: " << time << " Log: " << log << endl;
         }
     }
 };

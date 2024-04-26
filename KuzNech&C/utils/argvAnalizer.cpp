@@ -13,7 +13,7 @@ size_t paramIndex(int argc, char** argv, regex pattern) {
         if (regex_match(str, pattern)) return i;
     }
 
-    throw invalid_argument("Not found parameter, make sure you are entering correct values!");
+    throw invalid_argument("Prameter not found in argv!");
 }
 
 string getParam(int argc, char** argv, regex pattern) {
@@ -28,11 +28,9 @@ string getParam(int argc, char** argv, regex pattern) {
         }
     }
 
-    throw invalid_argument("Incorrect value in argv string. Make sure you are entering correct values!");
+    throw invalid_argument("Incorrect value in argv string!");
 }
 
-// ========== ========= ==== ==== ======
-// extracting arguments from argv string
 ProgramParams extractProgramParams(int argc, char** argv) {
     ProgramParams params;
     regex pattern("--[a-zA-Z]+=\\\"([^\"]*)\\\"");
@@ -41,9 +39,8 @@ ProgramParams extractProgramParams(int argc, char** argv) {
     params.logFile->param = getParam(argc, argv, params.logFile->regPattern);
     params.key->param = getParam(argc, argv, params.key->regPattern);
     params.offset->param = (size_t)stoull(getParam(argc, argv, params.offset->regPattern));
-    // params.mode->param = (KUZ_CONST::KUZ_MODE)stoull(getParam(argc, argv, params.mode->regPattern));
-
-    // cout << params.mode->param << " - kuznechick mode running..." << endl;
+    params.mode->param = (size_t)stoull(getParam(argc, argv, params.mode->regPattern));
+    params.countChecksum->param = (bool)stoull(getParam(argc, argv, params.countChecksum->regPattern));
 
     return params;
 }

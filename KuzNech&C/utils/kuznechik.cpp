@@ -111,7 +111,7 @@ vector<uint8_t> lFunc(vector<uint8_t> a) {
     return b;
 }
 
-static vector<uint8_t> lFuncInv(vector<uint8_t> a) {
+vector<uint8_t> lFuncInv(vector<uint8_t> a) {
     vector<uint8_t> b = a;
     for (size_t i = 0; i < KUZ_CONST::BLOCK_SIZE; i++)
         b = rFuncInv(b);
@@ -123,7 +123,8 @@ static vector<uint8_t> lFuncInv(vector<uint8_t> a) {
 
 // ======= = ======= ==========
 // encript / decript functions:
-vector<uint8_t> encript(vector<uint8_t> block, vector<vector<uint8_t>> keys) {
+vector<uint8_t> encrypt(vector<uint8_t> block, vector<vector<uint8_t>> keys) {
+    if (block.size() != KUZ_CONST::BLOCK_SIZE) throw "Block size incorrect (encript)";
     vector<uint8_t> cypherText = block;
 
     for (size_t i = 0; i < 9; i++) {
@@ -132,10 +133,12 @@ vector<uint8_t> encript(vector<uint8_t> block, vector<vector<uint8_t>> keys) {
         cypherText = lFunc(cypherText);
     }
     cypherText = xFunc(cypherText, keys[9]);
+
     return cypherText;
 }
 
-vector<uint8_t> decript(vector<uint8_t> block, vector<vector<uint8_t>> keys) {
+vector<uint8_t> decrypt(vector<uint8_t> block, vector<vector<uint8_t>> keys) {
+    if (block.size() != KUZ_CONST::BLOCK_SIZE) throw "Block size incorrect (decript)";
     vector<uint8_t> plaintext = block;
 
     plaintext = xFunc(plaintext, keys[9]);

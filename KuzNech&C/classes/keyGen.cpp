@@ -58,38 +58,6 @@ class KeyGen {
         return key;
     }
 
-    /**
-     * @details generates round keys for their further usage in xFunc
-     */
-    vector<vector<uint8_t>> expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
-        vector<vector<uint8_t>> key(KUZ_CONST::ROUNDS_AMOUNT, vector<uint8_t>(64));
-        vector<vector<uint8_t>> iterK = constant();
-
-        vector<vector<uint8_t>> iter12(2);
-        vector<vector<uint8_t>> iter34(2);
-
-        key[0] = lKey;
-        key[1] = rKey;
-        iter12[0] = lKey;
-        iter12[1] = rKey;
-
-        for (size_t i = 0; i < 4; i++) {
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
-
-            key[2 * i + 2] = iter12[0];
-            key[2 * i + 3] = iter12[1];
-        }
-
-        return key;
-    }
-
     vector<uint8_t> readKey(const string& filename, size_t fileShift = 0) {
         ifstream file(filename, ios::binary);
         if (!file.is_open()) {
@@ -130,6 +98,38 @@ class KeyGen {
     }
 
    public:
+    /**
+     * @details generates round keys for their further usage in xFunc
+     */
+    vector<vector<uint8_t>> expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
+        vector<vector<uint8_t>> key(KUZ_CONST::ROUNDS_AMOUNT, vector<uint8_t>(64));
+        vector<vector<uint8_t>> iterK = constant();
+
+        vector<vector<uint8_t>> iter12(2);
+        vector<vector<uint8_t>> iter34(2);
+
+        key[0] = lKey;
+        key[1] = rKey;
+        iter12[0] = lKey;
+        iter12[1] = rKey;
+
+        for (size_t i = 0; i < 4; i++) {
+            iter34 = feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
+            iter12 = feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
+            iter34 = feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
+            iter12 = feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
+            iter34 = feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
+            iter12 = feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
+            iter34 = feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
+            iter12 = feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
+
+            key[2 * i + 2] = iter12[0];
+            key[2 * i + 3] = iter12[1];
+        }
+
+        return key;
+    }
+
     vector<vector<uint8_t>> generateRoundKeys(const string& filename, size_t fileShift = 0) {
         vector<uint8_t> masterKey = readKey(filename, fileShift);
 
