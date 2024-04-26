@@ -14,11 +14,11 @@ To run the compiled file you need:
 
 `--mode="{0/1/2}"` - number of mode in which program will run:
 
-1 - encryption of file;
+0 - encryption of file;
 
-2 - decryption of file;
+1 - decryption of file;
 
-3 - tests;
+2 - tests;
 
 `--checksum="{0/1}"` - boolean value `generate` or `not` md5 checksum of executable file.
 
