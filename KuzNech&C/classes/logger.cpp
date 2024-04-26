@@ -15,6 +15,9 @@
 
 using namespace std;
 
+#ifndef LOGGER
+#define LOGGER
+
 class Logger {
    private:
     ofstream* file;  // file where logs will be written
@@ -71,3 +74,5 @@ class Logger {
         }
     }
 };
+
+#endif

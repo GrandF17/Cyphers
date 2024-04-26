@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 
-#include "./interface/constants.h"
-#include "./interface/interfaces.h"
+#include "../interfaces/constants.h"
+#include "../interfaces/interfaces.h"
 
 #ifndef KUZ_CRYPTO
 #define KUZ_CRYPTO

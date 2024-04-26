@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../interface/constants.h"
-#include "../kuznechik.cpp"
+#include "../interfaces/constants.h"
+#include "../utils/kuznechik.cpp"
 
 #ifndef KEY_GEN
 #define KEY_GEN
