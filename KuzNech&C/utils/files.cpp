@@ -10,7 +10,9 @@ using namespace std;
 vector<uint8_t> read(string filename) {
     ifstream myfile(filename, ios::binary);
     vector<uint8_t> data((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>());
+
     myfile.close();
+    myfile.clear();
     return data;
 }
 
@@ -21,6 +23,9 @@ void save(vector<uint8_t> data, string outpuFilename, int size) {
     } else {
         outfile.write((char *)&data[0], data.size());
     }
+
+    outfile.close();
+    delete &outfile;
 }
 
 #endif

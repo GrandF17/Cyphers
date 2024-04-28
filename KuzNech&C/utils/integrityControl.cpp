@@ -19,6 +19,8 @@ string fileContentToString(const string& filename) {
     }
 
     file.close();
+    delete &file;
+
     return content;
 }
 
