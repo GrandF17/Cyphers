@@ -7,25 +7,60 @@
 
 using namespace std;
 
-vector<uint8_t> read(string filename) {
+vector<uint8_t> read(string filename, class Logger* logger) {
+    vector<uint8_t> data;
     ifstream myfile(filename, ios::binary);
-    vector<uint8_t> data((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>());
+
+    if (!myfile.is_open()) {
+        logger->log({"Error: Failed to open file " + filename});
+        return data;
+    }
+
+    data.assign((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>());
+
+    if (myfile.bad()) {
+        logger->log({"Error: Failed to read file " + filename});
+        myfile.close();
+        return data;
+    }
 
     myfile.close();
-    myfile.clear();
+
+    if (myfile.is_open()) {
+        logger->log({"Error : Failed to close file " + filename});
+        return data;
+    }
+
     return data;
 }
 
-void save(vector<uint8_t> data, string outpuFilename, int size) {
-    ofstream outfile(outpuFilename, ios::out | ios::binary);
-    if (size != 0) {
-        outfile.write((char *)&data[0], size);
+void save(vector<uint8_t> data, string outputFilename, int size, class Logger* logger) {
+    ofstream outfile(outputFilename, ios::out | ios::binary);
+    if (!outfile.is_open()) {
+        logger->log({"Error: Failed to open file " +
+                     outputFilename +
+                     " for writing"});
+        return;
+    }
+
+    if (size != 0 && size <= data.size()) {
+        outfile.write(reinterpret_cast<char*>(&data[0]), size);
     } else {
-        outfile.write((char *)&data[0], data.size());
+        outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
+    }
+
+    if (outfile.bad()) {
+        logger->log({"Error: Failed to write file " + outputFilename});
+        outfile.close();
+        return;
     }
 
     outfile.close();
-    delete &outfile;
+
+    if (outfile.is_open()) {
+        logger->log({"Error: Failed to close file " + outputFilename});
+        return;
+    }
 }
 
 #endif

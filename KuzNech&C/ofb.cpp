@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
     if (params.mode->param == KuzMod::ENCRIPT) {
         vector<string> logs;
-        vector<uint8_t> data = read(params.file->param);
+        vector<uint8_t> data = read(params.file->param, &logger);
         vector<vector<uint8_t>> keys = keyGen.generateRoundKeys(params.key->param, params.offset->param);
 
         logs.push_back({"File " + params.file->param + " encrypting..."});
@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 
         string time = md5(dateString()).append(".ENC");
         string outpuFile = time;
-        save(encrypted, outpuFile, 0);
+        save(encrypted, outpuFile, 0, &logger);
 
         logs.push_back({"Ecrypted to: " + outpuFile});
         logger.log(logs);
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 
     if (params.mode->param == KuzMod::DECRIPT) {
         vector<string> logs;
-        vector<uint8_t> data = read(params.file->param);
+        vector<uint8_t> data = read(params.file->param, &logger);
         vector<vector<uint8_t>> keys = keyGen.generateRoundKeys(params.key->param, params.offset->param);
 
         logs.push_back({"File " + params.file->param + " decrypting..."});
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
 
         string time = md5(dateString()).append(".DEC");
         string outpuFile = time;
-        save(decrypted, outpuFile, size);
+        save(decrypted, outpuFile, size, &logger);
 
         logs.push_back({"Decrypted to: " + outpuFile});
         logger.log(logs);
