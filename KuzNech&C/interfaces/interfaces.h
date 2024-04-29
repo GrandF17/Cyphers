@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <regex>
 #include <vector>
 
 #include "./constants.h"

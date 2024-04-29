@@ -17,7 +17,7 @@ using namespace std;
  *
  * @public only one function: generateRoundKeys(...)
  */
-class KeyGen {
+class Key {
    private:
     /**
      * counting constant values for calculating round keys
@@ -58,6 +58,9 @@ class KeyGen {
         return key;
     }
 
+    /**
+     * reading file?,that contains bit sequence, to create key
+     */
     vector<uint8_t> readKey(const string& filename, size_t fileShift = 0) {
         ifstream file(filename, ios::binary);
         if (!file.is_open()) {
@@ -97,9 +100,9 @@ class KeyGen {
         return masteKey;
     }
 
-   public:
     /**
      * @details generates round keys for their further usage in xFunc
+     * based on Feistel transformation
      */
     vector<vector<uint8_t>> expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
         vector<vector<uint8_t>> key(KUZ_CONST::ROUNDS_AMOUNT, vector<uint8_t>(64));
@@ -130,13 +133,36 @@ class KeyGen {
         return key;
     }
 
-    vector<vector<uint8_t>> generateRoundKeys(const string& filename, size_t fileShift = 0) {
+    vector<vector<uint8_t>> leftAndRight(const string& filename, size_t fileShift) {
         vector<uint8_t> masterKey = readKey(filename, fileShift);
 
         vector<uint8_t> leftHalf(masterKey.begin(), masterKey.begin() + KUZ_CONST::MASTER_KEY_BYTES / 2);
         vector<uint8_t> rightHalf(masterKey.begin() + KUZ_CONST::MASTER_KEY_BYTES / 2, masterKey.end());
 
-        return expandKey(leftHalf, rightHalf);
+        return {leftHalf, rightHalf};
+    }
+
+   public:
+    /**
+     * consists of two halfs (left and right)
+     */
+    const unique_ptr<vector<vector<uint8_t>>> masterKey;
+    const unique_ptr<vector<vector<uint8_t>>> keys;
+
+    /**
+     * @param fileName default value is string "NoFileSelected" to
+     */
+    Key(string fileName = "./1048576.key", size_t offset = 0)
+        : masterKey(make_unique<vector<vector<uint8_t>>>(leftAndRight(fileName, offset))),
+          keys(make_unique<vector<vector<uint8_t>>>(expandKey((*masterKey)[0], (*masterKey)[1]))) {}
+
+    ~Key() = default;
+
+    /**
+     * some additional functionality for tests
+     */
+    vector<vector<uint8_t>> createTestKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
+        return expandKey(lKey, rKey);
     }
 };
 

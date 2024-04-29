@@ -1,3 +1,8 @@
+#include <fstream>
+#include <string>
+#include <vector>
+
+#include "../classes/logger.cpp"
 #include "../libraries/md5.h"
 
 #ifndef KUZ_INTEGRITY_CONTROL
@@ -49,7 +54,6 @@ void checkExecutableHash(char** argv, class Logger* logger) {
      */
     if (reftext.compare(hashtext) != 0) {
         logger->log({"Executable integrity is broken, aborting!"});
-        throw runtime_error("Executable integrity is broken, aborting!");
         exit(1);
     }
 

@@ -8,6 +8,7 @@
 
 using namespace std;
 
+namespace KUZ_MODES {
 vector<uint8_t> encryptKuznechik(vector<uint8_t> &data, vector<vector<uint8_t>> keys) {
     vector<uint8_t> result;
     for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
@@ -31,5 +32,6 @@ vector<uint8_t> decryptKuznechik(vector<uint8_t> &data, vector<vector<uint8_t>> 
     }
     return result;
 }
+}  // namespace KUZ_MODES
 
 #endif
