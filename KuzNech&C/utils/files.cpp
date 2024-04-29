@@ -15,7 +15,7 @@ vector<uint8_t> read(string filename, class Logger* logger) {
 
     if (!myfile.is_open()) {
         logger->log({"Error: Failed to open file " + filename});
-        return data;
+        throw "Function read logged error (myfile.is_open()).";
     }
 
     data.assign((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>());
@@ -23,14 +23,14 @@ vector<uint8_t> read(string filename, class Logger* logger) {
     if (myfile.bad()) {
         logger->log({"Error: Failed to read file " + filename});
         myfile.close();
-        return data;
+        throw "Function read logged error (myfile.bad()).";
     }
 
     myfile.close();
 
     if (myfile.is_open()) {
         logger->log({"Error : Failed to close file " + filename});
-        return data;
+        throw "Function read logged error (myfile.is_open()).";
     }
 
     return data;
@@ -42,7 +42,7 @@ void save(vector<uint8_t> data, string outputFilename, int size, class Logger* l
         logger->log({"Error: Failed to open file " +
                      outputFilename +
                      " for writing"});
-        return;
+        throw "Function save logged error (outfile.is_open()).";
     }
 
     if (size != 0 && size <= data.size()) {
@@ -54,14 +54,14 @@ void save(vector<uint8_t> data, string outputFilename, int size, class Logger* l
     if (outfile.bad()) {
         logger->log({"Error: Failed to write file " + outputFilename});
         outfile.close();
-        return;
+        throw "Function save logged error (outfile.bad()).";
     }
 
     outfile.close();
 
     if (outfile.is_open()) {
         logger->log({"Error: Failed to close file " + outputFilename});
-        return;
+        throw "Function save logged error (outfile.is_open()).";
     }
 }
 

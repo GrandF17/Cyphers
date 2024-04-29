@@ -68,3 +68,13 @@ Date: [2024-04-29 14:18:46]  Log: Ecrypted to: 3f7e9955642d7e00bc71675c1607c1c0.
 Date: [2024-04-29 14:19:02]  Log: Executable integrity is checked!
 Date: [2024-04-29 14:19:02]  Log: File 3f7e9955642d7e00bc71675c1607c1c0.ENC decrypting...
 Date: [2024-04-29 14:19:02]  Log: Decrypted to: de7081ef71ffbc7520edb095be8b848f.DEC
+Date: [2024-04-29 17:00:54]  Log: Executable integrity is broken, aborting!
+Date: [2024-04-29 17:00:57]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-04-29 17:01:00]  Log: Executable integrity is checked!
+Date: [2024-04-29 17:01:00]  Log: Error: Failed to open file 3f7e9955642d7e00bc71675c1607c1c0.ENC
+Date: [2024-04-29 17:01:00]  Log: File 3f7e9955642d7e00bc71675c1607c1c0.ENC decrypting...
+Date: [2024-04-29 17:01:00]  Log: Decrypted to: 1c0d235a77a84172e6ed92cbb0ffc011.DEC
+Date: [2024-04-29 17:03:57]  Log: Executable integrity is broken, aborting!
+Date: [2024-04-29 17:04:01]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-04-29 17:04:03]  Log: Executable integrity is checked!
+Date: [2024-04-29 17:04:03]  Log: Error: Failed to open file 3f7e9955642d7e00bc71675c1607c1c0.ENC
