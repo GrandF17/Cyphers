@@ -6,7 +6,7 @@ To run the compiled file you need:
 
 `--f="{FILE}"` - specifies that the next parameter is the path to your file that you want to encrypt.
 
-`--k="{BIT_SEQUENCE.key}"` - specifies that the next parameter is the path to the file with the bit sequence (minimum 256 bits) for the encryption key. `Attention!` this file should have extencion `.key`!
+`--k="{BIT_SEQUENCE}.key"` - specifies that the next parameter is the path to the file with the bit sequence (minimum 256 bits) for the encryption key. `Attention!` this file should have extencion `.key`!
 
 `--o="{OFFSET_NUMBER}"` - offset in the file with the key (if the file contains more than 256 bits)
 
