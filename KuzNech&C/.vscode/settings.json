@@ -70,6 +70,7 @@
     "xtr1common": "cpp",
     "xtree": "cpp",
     "xutility": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "csignal": "cpp"
   }
 }
