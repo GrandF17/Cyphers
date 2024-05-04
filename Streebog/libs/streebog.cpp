@@ -140,14 +140,12 @@ inline vector<uint8_t> Streebog::G(
     return newH;
 }
 
-vector<uint8_t> Streebog::streebog256(const vector<uint8_t>& message) {
-    /**
-     * first step (define vars)
-     */
-
-    vector<uint8_t> h(64, 0x01);  // if 256 --> set 0x01 ELSE if 512 --> set 0x00
-    vector<uint8_t> N(64, 0x00), S(64, 0x00), m;
-
+inline vector<uint8_t> Streebog::countHash(
+    const vector<uint8_t>& message,
+    vector<uint8_t> h,
+    vector<uint8_t> N,
+    vector<uint8_t> S,
+    vector<uint8_t> m) {
     /**
      * second step (check if maessage size < 512)
      * if NOT do:
@@ -185,7 +183,20 @@ vector<uint8_t> Streebog::streebog256(const vector<uint8_t>& message) {
     h = G(zero, h, N);
     h = G(zero, h, S);
 
-    // return first 32 bytes of hash str
+    return h;
+}
+
+vector<uint8_t> Streebog::streebog256(const vector<uint8_t>& message) {
+    /**
+     * first step (define vars)
+     */
+
+    vector<uint8_t> h(64, 0x01);  // if 256 --> set 0x01
+    vector<uint8_t> N(64, 0x00), S(64, 0x00), m;
+
+    h = countHash(message, h, N, S, m);
+
+    // return first 32 bytes of hashed str
     return vector<uint8_t>(h.begin(), h.begin() + 32);
 }
 
@@ -196,13 +207,55 @@ vector<uint8_t> Streebog::streebog256(const string& message) {
     return streebog256(encode(message));
 }
 
+vector<uint8_t> Streebog::streebog512(const vector<uint8_t>& message) {
+    /**
+     * first step (define vars)
+     */
+
+    vector<uint8_t> h(64, 0x00);  // if 512 --> set 0x00
+    vector<uint8_t> N(64, 0x00), S(64, 0x00), m;
+
+    h = countHash(message, h, N, S, m);
+
+    // return all bytes of hashed str
+    return h;
+}
+
+/**
+ * @overload of streebog256(vector<uint8_t> message)
+ */
+vector<uint8_t> Streebog::streebog512(const string& message) {
+    return streebog512(encode(message));
+}
+
 Streebog::Streebog() {}
 
 //////////////////////////////
 
-string streebog(const string& str) {
+string streebog(const string& str, KEY_LEN len) {
     Streebog hash = Streebog();
-    return hash.decode(hash.streebog256(str));
+    switch (len) {
+        case k64:
+            return hash.decode(hash.streebog512(str));
+            break;
+
+        default:
+            return hash.decode(hash.streebog256(str));
+            break;
+    }
+}
+
+vector<uint8_t> streebog(const vector<uint8_t>& bytes, KEY_LEN len) {
+    Streebog hash = Streebog();
+    switch (len) {
+        case k64:
+            return hash.streebog512(bytes);
+            break;
+
+        default:
+            return hash.streebog256(bytes);
+            break;
+    }
 }
 
 #endif

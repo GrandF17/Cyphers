@@ -15,7 +15,7 @@ class Streebog {
     Streebog();
 
     /**
-     * @returns hash of byte sequence passed to func
+     * @returns hash of byte sequence passed to func  (key len = 256)
      */
     vector<uint8_t> streebog256(const vector<uint8_t>& message);
 
@@ -23,6 +23,16 @@ class Streebog {
      * @overload of streebog256(vector<uint8_t> message)
      */
     vector<uint8_t> streebog256(const string& message);
+
+    /**
+     * @returns hash of byte sequence passed to func (key len = 512)
+     */
+    vector<uint8_t> streebog512(const vector<uint8_t>& message);
+
+    /**
+     * @overload of streebog512(vector<uint8_t> message)
+     */
+    vector<uint8_t> streebog512(const string& message);
 
     static vector<uint8_t> encode(const string& str);    // str to bytes
     static string decode(const vector<uint8_t>& block);  // bytes to str
@@ -48,11 +58,21 @@ class Streebog {
      */
     static inline vector<uint8_t> L(vector<uint8_t> block);
     static inline vector<uint8_t> keySchedule(vector<uint8_t> K, size_t i);
+    static inline vector<uint8_t> countHash(
+        const vector<uint8_t>& message,
+        vector<uint8_t> h,
+        vector<uint8_t> N,
+        vector<uint8_t> S,
+        vector<uint8_t> m);
 
     static inline vector<uint8_t> E(vector<uint8_t> K, const vector<uint8_t>& m);
     static inline vector<uint8_t> G(const vector<uint8_t>& N, const vector<uint8_t>& h, const vector<uint8_t>& m);
 };
 
-string streebog(const string& str);
+enum KEY_LEN { k32 = 32,
+               k64 = 64 };
+
+string streebog(const string& str, KEY_LEN len = k32);
+vector<uint8_t> streebog(const vector<uint8_t>& bytes, KEY_LEN len = k32);
 
 #endif
