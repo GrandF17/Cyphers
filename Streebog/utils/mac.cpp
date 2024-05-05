@@ -14,7 +14,7 @@ using namespace std;
 #define C_out 0x5c  // 01011100
 
 /**
- * NMAC_n(X) = Hash_n[(K XOR C_out) P Hash_n((K XOR C_in) P X)]
+ * HMAC_n(X) = Hash_n[(K XOR C_out) P Hash_n((K XOR C_in) P X)]
  * K - key and it is defined
  * X - text
  * n - key length (KEY_LEN)

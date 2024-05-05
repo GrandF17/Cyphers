@@ -2,45 +2,60 @@
 #include <iomanip>
 #include <iostream>
 
+#include "./classes/key.cpp"
 #include "./classes/integrity.cpp"
 #include "./libs/streebog.h"
+#include "./utils/argvAnalizer.cpp"
 #include "./utils/mac.cpp"
 #include "./utils/vLog.cpp"
+#include "./tests/tests.cpp"
 
 using namespace std;
 
+#define LABEL_LEN 4
+#define SEED_LEN 8
+
+vector<uint8_t> kdp(const ProgramParams& params) {
+    Key key = Key(params.key->param, params.offset->param, params.keyLen->param);
+    vector<uint8_t> message(4 + LABEL_LEN + SEED_LEN, 0x00);
+
+    message[0] = 0x01;
+
+    vector<uint8_t> label = { 0x01, 0x02, 0x03, 0x04 };
+    vector<uint8_t> seed = { 0x11, 0x22, 0x44, 0x88, 0xFF, 0x04, 0x08, 0x0F };
+
+    memcpy(message.data() + 1, label.data(), LABEL_LEN);
+    message[LABEL_LEN + 1] = 0;
+
+    memcpy(message.data() + LABEL_LEN + 2, seed.data(), SEED_LEN);
+    message[2 + LABEL_LEN + SEED_LEN] = 0x01;
+    message[3 + LABEL_LEN + SEED_LEN] = 0;
+
+    vector<uint8_t> derivativeKey = NMAC(*key.masterKey, message);
+    key.~Key();
+
+    return derivativeKey;
+}
+
 int main(int argc, char** argv) {
-    Logger logger = Logger("./logs.txt", false);
+    ProgramParams params = extractProgramParams(argc, argv);
+    Logger logger = Logger(params.logFile->param, false);
     IntegrityControl watcher;
-    watcher.createReferenceFile(argv, &logger);
-    watcher.startChecksumwatcher(argv, &logger);
-    // by default streebog returns 32 bit hash
-    cout << "Streebog hash: " << streebog("The quick brown fox jumps over the lazy dog") << endl;
-    vector<uint8_t> key256 = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                              0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-                              0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-                              0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
-    vector<uint8_t> key512 = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                              0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-                              0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-                              0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
-                              0xb1, 0x08, 0x5b, 0xda, 0x1e, 0xca, 0xda, 0xe9,
-                              0xeb, 0xcb, 0x2f, 0x81, 0xc0, 0x65, 0x7c, 0x1f,
-                              0x2f, 0x6a, 0x76, 0x43, 0x2e, 0x45, 0xd0, 0x16,
-                              0x71, 0x4e, 0xb8, 0x8d, 0x75, 0x85, 0xc4, 0xfc};
-    vector<uint8_t> text = {0x01, 0x26, 0xbd, 0xb8, 0x78, 0x00, 0xaf, 0x21, 0x43, 0x41, 0x45, 0x65, 0x63, 0x78, 0x01, 0x00};
 
-    cout << "HMAC result (key256): " << endl;
-    printVector(HMAC(key256, text));
+    if (params.countChecksum->param) watcher.createReferenceFile(argv, &logger);
+    watcher.startChecksumChecker(argv, &logger);
 
-    cout << "NMAC result (key256): " << endl;
-    printVector(NMAC(key256, text));
+    if (params.mode->param == 0) {
+        logger.log({"Running key diversification  protocol..."});
+        logger.log({{"Done! Received vector: "}, {"0x" + logger.bytesToString(kdp(params))}});
+    }
+    
+    if (params.mode->param == 1) {
+        logger.log({"Running tests..."});
+        bool allPassed = test();
+        logger.log({allPassed ? "All tests passed!" : "Some tests failed!"});
+    }
 
-    cout << "HMAC result (key512): " << endl;
-    printVector(HMAC(key512, text));
-
-    cout << "NMAC result (key512): " << endl;
-    printVector(NMAC(key512, text));
     watcher.~IntegrityControl();
     return 0;
 }

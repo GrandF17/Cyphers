@@ -1,0 +1,53 @@
+Date: [2024-05-05 14:14:48]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 14:14:48]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:18:45]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:18:45]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:20:15]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:20:16]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:20:20]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:20:20]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:20:43]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:20:43]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:21:15]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:21:15]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:21:31]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:21:31]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:36:55]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:36:55]  Log: Executable integrity is checked!
+Date: [2024-05-05 15:38:09]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 15:38:09]  Log: Running tests...
+Date: [2024-05-05 15:38:09]  Log: All tests passed!
+Date: [2024-05-05 15:38:09]  Log: Executable integrity is checked!
+Date: [2024-05-05 16:18:08]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:19:54]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:34:56]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:35:46]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:35:49]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:35:49]  Log: Executable integrity is checked!
+Date: [2024-05-05 16:38:52]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:38:52]  Log: Executable integrity is checked!
+Date: [2024-05-05 16:38:56]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:38:56]  Log: Executable integrity is checked!
+Date: [2024-05-05 16:41:17]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:41:17]  Log: Executable integrity is checked!
+Date: [2024-05-05 16:41:33]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 16:41:33]  Log: Executable integrity is checked!
+Date: [2024-05-05 17:12:41]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 17:12:41]  Log: Running key diversification  protocol...
+Date: [2024-05-05 17:12:41]  Log: Done! Received vector: 
+Date: [2024-05-05 17:12:41]  Log: d654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-05 17:12:41]  Log: Executable integrity is checked!
+Date: [2024-05-05 17:13:00]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 17:13:00]  Log: Running key diversification  protocol...
+Date: [2024-05-05 17:13:00]  Log: Done! Received vector: 
+Date: [2024-05-05 17:13:00]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-05 17:13:00]  Log: Executable integrity is checked!
+Date: [2024-05-05 17:13:42]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-05 17:13:42]  Log: Running key diversification  protocol...
+Date: [2024-05-05 17:13:42]  Log: Done! Received vector: 
+Date: [2024-05-05 17:13:42]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-05 17:13:42]  Log: Executable integrity is checked!
+Date: [2024-05-05 17:14:52]  Log: Running key diversification  protocol...
+Date: [2024-05-05 17:14:52]  Log: Done! Received vector: 
+Date: [2024-05-05 17:14:52]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-05 17:14:52]  Log: Executable integrity is broken, aborting!

@@ -20,10 +20,6 @@ using namespace std;
 #define LOGGER
 
 class Logger {
-   private:
-    ofstream* file;  // file where logs will be written
-    bool quietMod;   // true - logs to console, else - not
-
    public:
     /**
      * @param fileName default value is string "NoFileSelected" to
@@ -66,6 +62,10 @@ class Logger {
         }
         return ss.str();
     }
+
+   private:
+    ofstream* file;  // file where logs will be written
+    bool quietMod;   // true - logs to console, else - not
 };
 
 #endif

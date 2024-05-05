@@ -60,27 +60,31 @@ class IntegrityControl {
 
     void checksumChecker(char** argv, class Logger* logger) {
         while (!closeAllThreads) {
-            string reftext = fileContentToString("./checksum.dat");
-            string hashtext = md5(fileContentToString(argv[0]));
-
-            /**
-             * 1 - means that second string stands right from first string after sort
-             * 0 - both second and first strings appears on equal places after sort
-             * -1 - means that second string stands left from first string after sort
-             *
-             * simplifying:
-             * a < b
-             * a == a
-             * c > b
-             */
-            if (reftext.compare(hashtext) != 0) {
-                logger->log({"Executable integrity is broken, aborting!"});
-                exit(1);
-            }
-
-            logger->log({"Executable integrity is checked!"});
+            inner(argv, logger);
             this_thread::sleep_for(chrono::seconds(3));  // 3 sec delay
         }
+    }
+
+    void inner(char** argv, class Logger* logger) {
+        string reftext = fileContentToString("./checksum.dat");
+        string hashtext = md5(fileContentToString(argv[0]));
+
+        /**
+            * 1 - means that second string stands right from first string after sort
+            * 0 - both second and first strings appears on equal places after sort
+            * -1 - means that second string stands left from first string after sort
+            *
+            * simplifying:
+            * a < b
+            * a == a
+            * c > b
+            */
+        if (reftext.compare(hashtext) != 0) {
+            logger->log({"Executable integrity is broken, aborting!"});
+            exit(1);
+        }
+
+        logger->log({"Executable integrity is checked!"});
     }
 };
 
