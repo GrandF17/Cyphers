@@ -2,13 +2,18 @@
 #include <iomanip>
 #include <iostream>
 
+#include "./classes/integrity.cpp"
 #include "./libs/streebog.h"
 #include "./utils/mac.cpp"
 #include "./utils/vLog.cpp"
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
+    Logger logger = Logger("./logs.txt", false);
+    IntegrityControl watcher;
+    watcher.createReferenceFile(argv, &logger);
+    watcher.startChecksumwatcher(argv, &logger);
     // by default streebog returns 32 bit hash
     cout << "Streebog hash: " << streebog("The quick brown fox jumps over the lazy dog") << endl;
     vector<uint8_t> key256 = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -36,6 +41,6 @@ int main() {
 
     cout << "NMAC result (key512): " << endl;
     printVector(NMAC(key512, text));
-
+    watcher.~IntegrityControl();
     return 0;
 }

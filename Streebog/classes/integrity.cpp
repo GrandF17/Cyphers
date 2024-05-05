@@ -14,19 +14,18 @@
 
 using namespace std;
 
-class ChecksumChecker {
+class IntegrityControl {
    public:
-    ChecksumChecker() : closeAllThreads(false) {}
-
-    void startChecksumChecker() {
-        checksumThread = thread(&ChecksumChecker::checksumChecker, this);
-    }
-
-    void stopChecksumChecker() {
+    IntegrityControl() : closeAllThreads(false) {}
+    ~IntegrityControl() {
         closeAllThreads = true;
         if (checksumThread.joinable()) {
             checksumThread.join();
         }
+    }
+
+    void startChecksumChecker(char** argv, class Logger* logger) {
+        checksumThread = thread(&IntegrityControl::checksumChecker, this, argv, logger);;
     }
 
     void createReferenceFile(char** argv, class Logger* logger) {
@@ -56,8 +55,6 @@ class ChecksumChecker {
         }
 
         file.close();
-        delete &file;
-
         return content;
     }
 
