@@ -1,9 +1,9 @@
+#ifndef ARGV_ANALIZER
+#define ARGV_ANALIZER
+
 #include <regex>
 
 #include "../interfaces/interfaces.h"
-
-#ifndef KUZ_ARGV_ANALIZER
-#define KUZ_ARGV_ANALIZER
 
 using namespace std;
 

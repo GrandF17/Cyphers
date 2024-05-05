@@ -1,0 +1,13 @@
+Date: [2024-05-06 00:03:44]  Log: Running key diversification  protocol...
+Date: [2024-05-06 00:03:44]  Log: Done! Received vector: 
+Date: [2024-05-06 00:03:44]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-06 00:03:44]  Log: Executable integrity is broken, aborting!
+Date: [2024-05-06 00:03:49]  Log: Executable file checksum was written to ./checksum.dat!
+Date: [2024-05-06 00:03:49]  Log: Running key diversification  protocol...
+Date: [2024-05-06 00:03:49]  Log: Done! Received vector: 
+Date: [2024-05-06 00:03:49]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-06 00:03:49]  Log: Executable integrity is checked!
+Date: [2024-05-06 00:03:55]  Log: Running key diversification  protocol...
+Date: [2024-05-06 00:03:55]  Log: Done! Received vector: 
+Date: [2024-05-06 00:03:55]  Log: 0xd654240b6bfcb7f91c75904dc7402bd1f6fbe6972509c9febac7ce97d0030edb
+Date: [2024-05-06 00:03:55]  Log: Executable integrity is checked!

@@ -1,7 +1,7 @@
-#include <vector>
-
 #ifndef BYTES
 #define BYTES
+
+#include <vector>
 
 using namespace std;
 

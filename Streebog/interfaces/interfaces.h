@@ -1,3 +1,6 @@
+#ifndef INTERFACES
+#define INTERFACES
+
 #include <string.h>
 
 #include <cstdint>
@@ -6,9 +9,6 @@
 #include <vector>
 
 #include "./constants.h"
-
-#ifndef INTERFACES
-#define INTERFACES
 
 using namespace std;
 

@@ -1,7 +1,6 @@
-#include <cstdio>
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
+#ifndef LOGGER
+#define LOGGER
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -9,9 +8,6 @@
 #include "../utils/time.cpp"
 
 using namespace std;
-
-#ifndef LOGGER
-#define LOGGER
 
 class Logger {
    public:

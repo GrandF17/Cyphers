@@ -1,7 +1,7 @@
-#include <cstdint>
-
 #ifndef STREEBOG_CONST
 #define STREEBOG_CONST
+
+#include <cstdint>
 
 using namespace std;
 

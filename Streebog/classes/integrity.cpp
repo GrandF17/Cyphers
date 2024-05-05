@@ -1,3 +1,7 @@
+
+#ifndef INTEGRITY_CONTROL
+#define INTEGRITY_CONTROL
+
 #include <atomic>
 #include <chrono>
 #include <fstream>
@@ -8,9 +12,6 @@
 
 #include "../classes/logger.cpp"
 #include "../libs/md5.h"
-
-#ifndef INTEGRITY_CONTROL
-#define INTEGRITY_CONTROL
 
 using namespace std;
 

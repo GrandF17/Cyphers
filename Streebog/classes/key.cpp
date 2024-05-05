@@ -1,3 +1,6 @@
+#ifndef KEY_GEN
+#define KEY_GEN
+
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -5,9 +8,6 @@
 #include <vector>
 
 #include "../interfaces/constants.h"
-
-#ifndef KEY_GEN
-#define KEY_GEN
 
 using namespace std;
 
