@@ -18,7 +18,9 @@ Parameters you NEED to pass to make it work:
 
 `--checksum="{RECOUNT_CHECKSUM}"` 0/1 (bool) eq count or not
 
+```
 LINUX ONLY!!!
+```
 
 How to build (call from root):
 `g++ main.cpp libs/md5.cpp libs/streebog.cpp -o main -pthread`
