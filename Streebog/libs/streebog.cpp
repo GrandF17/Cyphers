@@ -1,15 +1,15 @@
 #ifndef STREEBOG
 #define STREEBOG
 
+#include "./streebog.h"
+
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
 
-// #include "../classes/logger.cpp"
 #include "../interfaces/constants.h"
-#include "./streebog.h"
 
 using namespace std;
 

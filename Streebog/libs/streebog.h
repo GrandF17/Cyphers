@@ -51,12 +51,14 @@ class Streebog {
     // basic hash-function logic of Streebog
     static inline vector<uint8_t> S(const vector<uint8_t>& block);
     static inline vector<uint8_t> P(const vector<uint8_t>& block);
-
     /**
      * don't use link to original var cause of difficulty of realisation
      * work with !COPY ONLY!
      */
     static inline vector<uint8_t> L(vector<uint8_t> block);
+    static inline vector<uint8_t> E(vector<uint8_t> K, const vector<uint8_t>& m);
+    static inline vector<uint8_t> G(const vector<uint8_t>& N, const vector<uint8_t>& h, const vector<uint8_t>& m);
+
     static inline vector<uint8_t> keySchedule(vector<uint8_t> K, size_t i);
     static inline vector<uint8_t> countHash(
         const vector<uint8_t>& message,
@@ -64,9 +66,6 @@ class Streebog {
         vector<uint8_t> N,
         vector<uint8_t> S,
         vector<uint8_t> m);
-
-    static inline vector<uint8_t> E(vector<uint8_t> K, const vector<uint8_t>& m);
-    static inline vector<uint8_t> G(const vector<uint8_t>& N, const vector<uint8_t>& h, const vector<uint8_t>& m);
 };
 
 enum KEY_LEN { k32 = 32,
