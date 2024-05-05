@@ -25,7 +25,7 @@ class IntegrityControl {
     }
 
     void startChecksumChecker(char** argv, class Logger* logger) {
-        checksumThread = thread(&IntegrityControl::checksumChecker, this, argv, logger);;
+        checksumThread = thread(&IntegrityControl::checksumChecker, this, argv, logger);
     }
 
     void createReferenceFile(char** argv, class Logger* logger) {
@@ -70,15 +70,15 @@ class IntegrityControl {
         string hashtext = md5(fileContentToString(argv[0]));
 
         /**
-            * 1 - means that second string stands right from first string after sort
-            * 0 - both second and first strings appears on equal places after sort
-            * -1 - means that second string stands left from first string after sort
-            *
-            * simplifying:
-            * a < b
-            * a == a
-            * c > b
-            */
+         * 1 - means that second string stands right from first string after sort
+         * 0 - both second and first strings appears on equal places after sort
+         * -1 - means that second string stands left from first string after sort
+         *
+         * simplifying:
+         * a < b
+         * a == a
+         * c > b
+         */
         if (reftext.compare(hashtext) != 0) {
             logger->log({"Executable integrity is broken, aborting!"});
             exit(1);

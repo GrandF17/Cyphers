@@ -1,12 +1,6 @@
-#include <stdarg.h>
-#include <string.h>
-
-#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
-#include <iomanip>
-#include <ios>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -24,7 +18,7 @@ class Logger {
     /**
      * @param fileName default value is string "NoFileSelected" to
      */
-    Logger(string fileName = "./KuznechikLogs.dat", bool _quietMod = true) {
+    Logger(string fileName = "./logs.dat", bool _quietMod = true) {
         quietMod = _quietMod;
         file = new ofstream(fileName, ios::out | ios::app);
         if (file->fail())
