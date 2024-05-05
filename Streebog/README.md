@@ -18,12 +18,16 @@ Parameters you NEED to pass to make it work:
 
 `--checksum="{RECOUNT_CHECKSUM}"` 0/1 (bool) eq count or not
 
-```
-LINUX ONLY!!!
-```
+`LINUX ONLY!!!`
 
 How to build (call from root):
-`g++ main.cpp libs/md5.cpp libs/streebog.cpp -o main -pthread`
+
+```
+g++ main.cpp libs/md5.cpp libs/streebog.cpp -o main -pthread
+```
 
 How to run:
-`./main --k="1048576.key" --o="0" --kl="64" --l="log.txt" --mode="0" --checksum="0"`
+
+```
+./main --k="1048576.key" --o="0" --kl="64" --l="log.txt" --mode="0" --checksum="0"
+```
