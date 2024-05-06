@@ -1,6 +1,6 @@
 ## Streebog Hash-func + NMAC/HMAC KDF(KDP)
 
-Here is represented implementation of Russian hash function + Key Distribution Protocol implementation based on NMAC / HMAC functions.
+Here is represented implementation of Russian hash function + Key Derivation Function (Protocol) implementation based on NMAC / HMAC functions.
 
 Streebog can be found by path: `./libs/streebog.cpp` (functions) and `./libs/streebog.h` (class);
 
