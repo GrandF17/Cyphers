@@ -31,4 +31,4 @@ How to run:
 ```
 ./main --k="1048576.key" --o="0" --kl="64" --l="log.txt" --mode="0" --checksum="0"
 ```
-### P.S. Can be run only on Unix
+### P.S. Can be run only on Unix OSs
