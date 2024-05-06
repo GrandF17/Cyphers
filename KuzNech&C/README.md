@@ -1,3 +1,5 @@
+# Kuznechik OFB
+
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
 To run the compiled file you need:
@@ -24,7 +26,7 @@ In this repository you can find the file `1048576.key`. This sequence of bits wa
 
 You can find out these test here: https://github.com/terrillmoore/NIST-Statistical-Test-Suite.
 
-# LINUX
+## LINUX
 
 Compile:
 
