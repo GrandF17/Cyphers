@@ -1,3 +1,5 @@
+## Streebog Hash-func + NMAC/HMAC KDF(KDP)
+
 Here is represented implementation of Russian hash function + Key Distribution Protocol implementation based on NMAC / HMAC functions.
 
 Streebog can be found by path: `./libs/streebog.cpp` (functions) and `./libs/streebog.h` (class);
@@ -18,7 +20,7 @@ Parameters you NEED to pass to make it work:
 
 `--checksum="{RECOUNT_CHECKSUM}"` 0/1 (bool) eq count or not
 
-# LINUX
+## LINUX
 
 How to build (call from root):
 
