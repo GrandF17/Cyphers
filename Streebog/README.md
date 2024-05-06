@@ -18,7 +18,7 @@ Parameters you NEED to pass to make it work:
 
 `--checksum="{RECOUNT_CHECKSUM}"` 0/1 (bool) eq count or not
 
-# LINUX USAGE
+# LINUX
 
 How to build (call from root):
 
