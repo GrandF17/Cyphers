@@ -1,7 +1,5 @@
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
-To compile use (I got 6.3 minGW32 compiler version): `g++ .\ofb.cpp .\libraries\md5.cpp -o main`
-
 To run the compiled file you need:
 
 `--f="{FILE}"` - specifies that the next parameter is the path to your file that you want to encrypt.
@@ -26,5 +24,15 @@ In this repository you can find the file `1048576.key`. This sequence of bits wa
 
 You can find out these test here: https://github.com/terrillmoore/NIST-Statistical-Test-Suite.
 
-Example:
-`./main --k="1048576.key" --o="0" --l="log.txt" --f="./kek.txt" --mode="2" --checksum="0"`
+`LINUX ONLY!`
+Compile:
+
+```
+g++ .\ofb.cpp .\libraries\md5.cpp -o main
+```
+
+Example how to run:
+
+```
+./main --k="1048576.key" --o="0" --l="log.txt" --f="./kek.txt" --mode="2" --checksum="0"
+```
