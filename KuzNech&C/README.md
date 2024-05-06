@@ -24,7 +24,7 @@ In this repository you can find the file `1048576.key`. This sequence of bits wa
 
 You can find out these test here: https://github.com/terrillmoore/NIST-Statistical-Test-Suite.
 
-`LINUX ONLY!`
+# LINUX USAGE
 
 Compile:
 
