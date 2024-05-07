@@ -2,7 +2,7 @@
 
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
-![OFB Encrypption]([https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OFB_encryption.svg/768px-OFB_encryption.svg.png](https://www.researchgate.net/publication/273260684/figure/fig4/AS:391769960271878@1470416645589/OFB-Output-Feedback-mode-Counter-CTR-Mode-Counter-mode-is-a-stream-cipher-such-as.png))
+![OFB Encrypption](https://www.researchgate.net/profile/Drdinesh-Goyal/publication/273260684/figure/fig4/AS:391769960271878@1470416645589/OFB-Output-Feedback-mode-Counter-CTR-Mode-Counter-mode-is-a-stream-cipher-such-as.png)
 
 To run the compiled file you need:
 
