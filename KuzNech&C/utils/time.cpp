@@ -1,3 +1,6 @@
+#ifndef TIME
+#define TIME
+
 #include <string.h>
 #include <time.h>
 
@@ -5,9 +8,6 @@
 #include <string>
 
 using namespace std;
-
-#ifndef TIME
-#define TIME
 
 string dateString() {
     time_t now = time(0);
