@@ -2,6 +2,9 @@
 
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
+Detailed description of OFB algo is written
+<a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#:~:text=The%20output%20feedback%20(OFB)%20mode,plaintext%20at%20the%20same%20location." target="_blank">here</a>
+
 To run the compiled file you need:
 
 `--f="{FILE}"` - specifies that the next parameter is the path to your file that you want to encrypt.
