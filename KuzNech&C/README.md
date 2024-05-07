@@ -31,7 +31,7 @@ You can find out these test here: https://github.com/terrillmoore/NIST-Statistic
 Compile:
 
 ```
-g++ .\ofb.cpp .\libraries\md5.cpp -o main
+g++ ./main.cpp libs/kuznechik.cpp libs/md5.cpp  -o main -pthread
 ```
 
 Example how to run:
