@@ -4,9 +4,9 @@
 #include "./kuznechik.h"
 
 #include <cstdint>
+#include <iomanip>
 #include <iostream>
 #include <vector>
-#include <iomanip>
 
 #include "../interfaces/constants.h"
 #include "../interfaces/interfaces.h"
@@ -187,7 +187,7 @@ uint64_t decode(vector<uint8_t> bytes) {
 
     uint64_t number = 0;
     for (size_t i = 0; i < bytes.size(); ++i) {
-        number = (number << 8) | bytes[i]; // Сдвигаем на 8 бит и добавляем новый байт
+        number = (number << 8) | bytes[i];  // shift left number by 1 byte
     }
 
     return number;
@@ -198,16 +198,16 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
                            const vector<uint8_t>& IV) {
     Kuznechik kuz;
 
-    vector<uint8_t> size = encode(data.size()); // 64 bits / 8 bytes
+    vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
     cout << data.size() << endl;
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
     for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
-        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);        
+        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
         for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
             encryptedData.push_back(data[i + j] ^ blockResult[j]);
-        
+
         feedback = blockResult;  // update output feedback
     }
     // got such data space managment:
@@ -232,8 +232,8 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint
         vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
         for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; ++j)
             result.push_back(data[i + j] ^ blockResult[j]);
-        
-        feedback = blockResult; // update output feedback
+
+        feedback = blockResult;  // update output feedback
     }
 
     result.resize(decode(size));

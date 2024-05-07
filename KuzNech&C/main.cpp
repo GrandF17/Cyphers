@@ -70,7 +70,8 @@ int main(int argc, char** argv) {
 
         vector<uint8_t> encrypted = encryptOFB(data, *key.keys, generateIV());
 
-        string outpuFile = md5(dateString()).append(".ENC");;
+        string outpuFile = md5(dateString()).append(".ENC");
+        ;
         save(encrypted, outpuFile, &logger);
 
         logger.log({"Ecrypted to: " + outpuFile});
@@ -106,7 +107,6 @@ int main(int argc, char** argv) {
         logger.log({allPassed ? "All tests passed!" : "Some tests failed!"});
     }
 
-    
     watcher.~IntegrityControl();
     return 0;
 }
