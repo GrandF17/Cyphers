@@ -1,23 +1,15 @@
-#include <stdarg.h>
-#include <string.h>
+#ifndef LOGGER
+#define LOGGER
 
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
 #include <fstream>
 #include <iomanip>
-#include <ios>
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <vector>
 
 #include "../utils/time.cpp"
 
 using namespace std;
-
-#ifndef LOGGER
-#define LOGGER
 
 class Logger {
    private:

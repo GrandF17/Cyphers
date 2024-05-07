@@ -1,11 +1,11 @@
+#ifndef FILES
+#define FILES
+
 #include <fstream>
 #include <string>
 #include <vector>
 
 #include "../classes/logger.cpp"
-
-#ifndef FILES_OP
-#define FILES_OP
 
 using namespace std;
 

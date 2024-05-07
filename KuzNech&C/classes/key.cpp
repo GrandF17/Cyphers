@@ -1,3 +1,7 @@
+
+#ifndef KEY_GEN
+#define KEY_GEN
+
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -5,10 +9,7 @@
 #include <vector>
 
 #include "../interfaces/constants.h"
-#include "../utils/kuznechik.cpp"
-
-#ifndef KEY_GEN
-#define KEY_GEN
+#include "../libs/kuznechik.h"
 
 using namespace std;
 
@@ -35,27 +36,6 @@ class Key {
             constants[i] = (constants[i]);
 
         return constants;
-    }
-
-    /**
-     * @details runs Feistel transformation for master key
-     * to gen round keys (which amount eq to ROUNDS_AMOUNT constant)
-     */
-    vector<vector<uint8_t>> feistelTransform(vector<uint8_t> in_lKey, vector<uint8_t> in_rKey, vector<uint8_t> iterKonst) {
-        vector<uint8_t> internal;
-        vector<uint8_t> rKeyOut = in_lKey;
-
-        internal = xFunc(in_lKey, iterKonst);
-        internal = sFunc(internal);
-        internal = lFunc(internal);
-
-        vector<uint8_t> lKeyOut = xFunc(internal, in_rKey);
-        vector<vector<uint8_t>> key(2);
-
-        key[0] = lKeyOut;
-        key[1] = rKeyOut;
-
-        return key;
     }
 
     /**
@@ -105,6 +85,7 @@ class Key {
      * based on Feistel transformation
      */
     vector<vector<uint8_t>> expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
+        Kuznechik kuz;
         vector<vector<uint8_t>> key(KUZ_CONST::ROUNDS_AMOUNT, vector<uint8_t>(64));
         vector<vector<uint8_t>> iterK = constant();
 
@@ -117,14 +98,14 @@ class Key {
         iter12[1] = rKey;
 
         for (size_t i = 0; i < 4; i++) {
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
-            iter34 = feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
-            iter12 = feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
+            iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
+            iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
+            iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
+            iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
+            iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
+            iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
+            iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
+            iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
 
             key[2 * i + 2] = iter12[0];
             key[2 * i + 3] = iter12[1];

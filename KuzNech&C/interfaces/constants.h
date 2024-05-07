@@ -1,9 +1,9 @@
+#ifndef KUZ_CONST
+#define KUZ_CONST
+
 #include <string.h>
 
 #include <cstdint>
-
-#ifndef KUZ_CONST
-#define KUZ_CONST
 
 using namespace std;
 

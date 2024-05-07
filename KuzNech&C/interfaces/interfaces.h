@@ -1,3 +1,6 @@
+#ifndef INTERFACES
+#define INTERFACES
+
 #include <string.h>
 
 #include <cstdint>
@@ -7,17 +10,7 @@
 
 #include "./constants.h"
 
-#ifndef KUZ_INTERFACES
-#define KUZ_INTERFACES
-
 using namespace std;
-
-/**
- * @param keys - round keys. Len = ROUNDS_AMOUNT
- */
-typedef struct {
-    vector<vector<uint8_t>> keys[KUZ_CONST::ROUNDS_AMOUNT];
-} roundKeys;
 
 /**
  * @param str is regex value for which we search in argv

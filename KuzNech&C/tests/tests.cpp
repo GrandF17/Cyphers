@@ -1,23 +1,13 @@
-#include <stdarg.h>
-#include <string.h>
-#include <time.h>
+#ifndef TESTS
+#define TESTS
 
 #include <cstdint>
 #include <cstdio>
-#include <cstdlib>
-#include <fstream>
 #include <iomanip>
-#include <ios>
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <vector>
 
 #include "../classes/key.cpp"
-#include "../utils/kuznechik.cpp"
-
-#ifndef KUZ_TESTS
-#define KUZ_TESTS
+#include "../libs/kuznechik.h"
 
 using namespace std;
 
@@ -38,7 +28,7 @@ bool compareVectors(const vector<uint8_t>& vec1, const vector<uint8_t>& vec2) {
 }
 
 bool encriptBlock(vector<vector<uint8_t>> keys) {
-    cout << "Encripting Block test: " << endl;
+    Kuznechik kuz;
     static vector<uint8_t> plain = {
         0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x00,
         0xff, 0xee, 0xdd, 0xcc, 0xbb, 0xaa, 0x99, 0x88};
@@ -47,14 +37,12 @@ bool encriptBlock(vector<vector<uint8_t>> keys) {
         0xb4, 0x53, 0x49, 0xf3, 0xb0, 0x17, 0xf4, 0x0b,
         0x60, 0xcb, 0xdf, 0xd2, 0x55, 0xff, 0x13, 0xcc};
 
-    vector<uint8_t> enc = encrypt(plain, keys);
-
-    cout << "\t" << (compareVectors(enc, cypher) ? "Test passed!" : "Test failed!") << endl;
+    vector<uint8_t> enc = kuz.encrypt(plain, keys);
     return compareVectors(enc, cypher);
 };
 
 bool decriptBlock(vector<vector<uint8_t>> keys) {
-    cout << "Decripting Block test: " << endl;
+    Kuznechik kuz;
     static vector<uint8_t> plain = {
         0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x00,
         0xff, 0xee, 0xdd, 0xcc, 0xbb, 0xaa, 0x99, 0x88};
@@ -63,9 +51,7 @@ bool decriptBlock(vector<vector<uint8_t>> keys) {
         0xb4, 0x53, 0x49, 0xf3, 0xb0, 0x17, 0xf4, 0x0b,
         0x60, 0xcb, 0xdf, 0xd2, 0x55, 0xff, 0x13, 0xcc};
 
-    vector<uint8_t> dec = decrypt(cypher, keys);
-
-    cout << "\t" << (compareVectors(dec, plain) ? "Test passed!" : "Test failed!") << endl;
+    vector<uint8_t> dec = kuz.decrypt(cypher, keys);
     return compareVectors(dec, plain);
 };
 
