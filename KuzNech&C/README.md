@@ -2,7 +2,7 @@
 
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
-![OFB Encrypption](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OFB_encryption.svg/768px-OFB_encryption.svg.png)
+![OFB Encrypption](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OFB_encryption.svg/768px-OFB_encryption.svg.jpeg)
 
 To run the compiled file you need:
 
