@@ -11,14 +11,6 @@
 
 using namespace std;
 
-void printBlock(vector<uint8_t> block) {
-    cout << hex << setfill('0');
-    for (const auto& byte : block) {
-        cout << setw(2) << static_cast<int>(byte);
-    }
-    cout << endl;
-}
-
 bool compareVectors(const vector<uint8_t>& vec1, const vector<uint8_t>& vec2) {
     if (vec1.size() != vec2.size()) {
         return false;

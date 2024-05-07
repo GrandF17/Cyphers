@@ -199,7 +199,6 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
     Kuznechik kuz;
 
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
-    cout << data.size() << endl;
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 

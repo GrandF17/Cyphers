@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
     /**
      * importaint check of executable file (main.exe)
      */
+    watcher.verifyOnStart(argv, &logger);
     watcher.startChecksumChecker(argv, &logger);
 
     if (params.mode->param == KuzMod::ENCRIPT) {

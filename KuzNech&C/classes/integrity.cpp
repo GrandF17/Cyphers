@@ -25,10 +25,23 @@ class IntegrityControl {
         }
     }
 
+    /*
+     * periodic verification in the stream (thread)
+     */
     void startChecksumChecker(char** argv, class Logger* logger) {
         checksumThread = thread(&IntegrityControl::checksumChecker, this, argv, logger);
     }
 
+    /*
+     * to verify chacksum on start of the program without time delay
+     */
+    void verifyOnStart(char** argv, class Logger* logger) {
+        verification(argv, logger);
+    }
+
+    /*
+     * to recalc checksum in case program logic was changed
+     */
     void createReferenceFile(char** argv, class Logger* logger) {
         string hashtext = md5(fileContentToString(argv[0]));
 
@@ -61,12 +74,12 @@ class IntegrityControl {
 
     void checksumChecker(char** argv, class Logger* logger) {
         while (!closeAllThreads) {
-            inner(argv, logger);
+            verification(argv, logger);
             this_thread::sleep_for(chrono::seconds(3));  // 3 sec delay
         }
     }
 
-    void inner(char** argv, class Logger* logger) {
+    void verification(char** argv, class Logger* logger) {
         string reftext = fileContentToString("./checksum.dat");
         string hashtext = md5(fileContentToString(argv[0]));
 
