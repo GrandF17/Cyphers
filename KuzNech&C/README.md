@@ -2,6 +2,8 @@
 
 Here you can find "Kuznechik" implementation with OFB operating mode.
 
+![OFB Encrypption](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OFB_encryption.svg/768px-OFB_encryption.svg.png)
+
 To run the compiled file you need:
 
 `--f="{FILE}"` - specifies that the next parameter is the path to your file that you want to encrypt.
