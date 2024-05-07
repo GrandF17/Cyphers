@@ -55,6 +55,20 @@ bool decriptBlock(vector<vector<uint8_t>> keys) {
     return compareVectors(dec, plain);
 };
 
+// bool ping_pong(vector<vector<uint8_t>> keys) {
+//     Kuznechik kuz;
+//     static vector<uint8_t> plain = {
+//         0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x00,
+//         0xff, 0xee, 0xdd, 0xcc, 0xbb, 0xaa, 0x99, 0x88};
+
+//     static vector<uint8_t> cypher = {
+//         0xb4, 0x53, 0x49, 0xf3, 0xb0, 0x17, 0xf4, 0x0b,
+//         0x60, 0xcb, 0xdf, 0xd2, 0x55, 0xff, 0x13, 0xcc};
+
+//     vector<uint8_t> enc = kuz.encrypt(plain, keys);
+//     return compareVectors(enc, cypher);
+// };
+
 bool test() {
     Key keygen;
     size_t total = 2;

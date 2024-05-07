@@ -68,14 +68,10 @@ int main(int argc, char** argv) {
 
         logger.log({"File " + params.file->param + " encrypting..."});
 
-        ofstream ost(KUZ_CONST::DEFAULT_FILE_SIZE);
-        ost << data.size();
-
         vector<uint8_t> encrypted = encryptOFB(data, *key.keys, generateIV());
 
-        string time = md5(dateString()).append(".ENC");
-        string outpuFile = time;
-        save(encrypted, outpuFile, 0, &logger);
+        string outpuFile = md5(dateString()).append(".ENC");;
+        save(encrypted, outpuFile, &logger);
 
         logger.log({"Ecrypted to: " + outpuFile});
 
@@ -91,16 +87,10 @@ int main(int argc, char** argv) {
 
         logger.log({"File " + params.file->param + " decrypting..."});
 
-        size_t size;
-        ifstream size_file(KUZ_CONST::DEFAULT_FILE_SIZE);
-        size_file >> size;
-        size_file.close();
+        vector<uint8_t> decrypted = decryptOFB(data, *key.keys);
 
-        vector<uint8_t> decrypted = decryptOFB(data, *key.keys, generateIV());
-
-        string time = md5(dateString()).append(".DEC");
-        string outpuFile = time;
-        save(decrypted, outpuFile, size, &logger);
+        string outpuFile = md5(dateString()).append(".DEC");
+        save(decrypted, outpuFile, &logger);
 
         logger.log({"Decrypted to: " + outpuFile});
 
@@ -116,10 +106,7 @@ int main(int argc, char** argv) {
         logger.log({allPassed ? "All tests passed!" : "Some tests failed!"});
     }
 
-    /**
-     * annihilating Logger
-     */
-    logger.~Logger();
-
+    
+    watcher.~IntegrityControl();
     return 0;
 }

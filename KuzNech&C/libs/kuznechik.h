@@ -36,12 +36,14 @@ class Kuznechik {
     static inline vector<uint8_t> lFuncInv(const vector<uint8_t>& a);
 };
 
+/**
+* When we encrypt file need to define IV
+* BUT when we decrypt data contains IV as first 16 bytes
+* so there is no need to pass IV inside function 
+*/
 vector<uint8_t> encryptOFB(
     const vector<uint8_t>& data,
     const vector<vector<uint8_t>>& keys,
     const vector<uint8_t>& IV);
-vector<uint8_t> decryptOFB(
-    const vector<uint8_t>& data,
-    const vector<vector<uint8_t>>& keys,
-    const vector<uint8_t>& IV);
+vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
 #endif

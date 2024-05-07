@@ -12,7 +12,6 @@ constexpr static size_t BLOCK_SIZE = 16;             // number of bytes in one b
 constexpr static size_t ROUNDS_AMOUNT = 10;          // amount of cypher rounds
 constexpr static size_t MASTER_KEY_BITS = 256;       // master key (0101010110...)
 constexpr static size_t MASTER_KEY_BYTES = 32;       // master key (0xFF, 0x1A, ...)
-const static string DEFAULT_FILE_SIZE = "size.dat";  // file that contains size of decripted file
 
 constexpr static uint8_t SBOX[256] = {
     0xFC, 0xEE, 0xDD, 0x11, 0xCF, 0x6E, 0x31, 0x16, 0xFB, 0xC4, 0xFA, 0xDA, 0x23, 0xC5, 0x04, 0x4D,  // 16

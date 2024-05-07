@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <iostream>
 #include <vector>
+#include <iomanip>
 
 #include "../interfaces/constants.h"
 #include "../interfaces/interfaces.h"
@@ -163,37 +164,79 @@ Kuznechik::Kuznechik() {}
 
 //////////////////////////////
 
+vector<uint8_t> encode(uint64_t number) {
+    vector<uint8_t> bytes(8, 0x00);
+    vector<uint8_t> tmp;  // stores only bytes on bumber (probably less than 64)
+
+    while (number > 0) {
+        tmp.push_back(static_cast<uint8_t>(number & 0xFF));
+        number >>= 8;  // shift right number by 1 byte
+    }
+
+    reverse(tmp.begin(), tmp.end());
+    copy(tmp.begin(), tmp.end(), bytes.end() - tmp.size());
+
+    return bytes;
+}
+
+uint64_t decode(vector<uint8_t> bytes) {
+    if (bytes.size() > sizeof(uint64_t)) {
+        cerr << "Error: Vector size exceeds uint64_t size!" << endl;
+        return 0;
+    }
+
+    uint64_t number = 0;
+    for (size_t i = 0; i < bytes.size(); ++i) {
+        number = (number << 8) | bytes[i]; // Сдвигаем на 8 бит и добавляем новый байт
+    }
+
+    return number;
+}
+
 vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
                            const vector<vector<uint8_t>>& keys,
                            const vector<uint8_t>& IV) {
     Kuznechik kuz;
-    vector<uint8_t> result;
+
+    vector<uint8_t> size = encode(data.size()); // 64 bits / 8 bytes
+    cout << data.size() << endl;
     vector<uint8_t> feedback = IV;
+    vector<uint8_t> encryptedData;
 
     for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
-        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; ++j) {
-            result.push_back(data[i + j] ^ blockResult[j]);
-        }
+        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);        
+        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+            encryptedData.push_back(data[i + j] ^ blockResult[j]);
+        
         feedback = blockResult;  // update output feedback
     }
+    // got such data space managment:
+    // [[...size_of_file], [...IV], [...encryptedData]]
+    vector<uint8_t> result(size.size() + feedback.size() + encryptedData.size());
+    copy(size.begin(), size.end(), result.begin());
+    copy(IV.begin(), IV.end(), result.begin() + size.size());
+    copy(encryptedData.begin(), encryptedData.end(), result.begin() + size.size() + feedback.size());
+
     return result;
 }
 
-vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys,
-                           const vector<uint8_t>& IV) {
+vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys) {
     Kuznechik kuz;
     vector<uint8_t> result;
-    vector<uint8_t> feedback = IV;
 
-    for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
-        vector<uint8_t> blockResult = kuz.decrypt(feedback, keys);
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; ++j) {
+    // extract a row vector - the final encrypted value of the transferred IV
+    vector<uint8_t> size(data.begin(), data.begin() + 8);
+    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + KUZ_CONST::BLOCK_SIZE);
+
+    for (int i = 8 + KUZ_CONST::BLOCK_SIZE; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
+        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; ++j)
             result.push_back(data[i + j] ^ blockResult[j]);
-        }
-        feedback = blockResult;  // update output feedback
+        
+        feedback = blockResult; // update output feedback
     }
+
+    result.resize(decode(size));
     return result;
 }
 

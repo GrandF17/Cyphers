@@ -36,7 +36,7 @@ vector<uint8_t> read(string filename, class Logger* logger) {
     return data;
 }
 
-void save(vector<uint8_t> data, string outputFilename, int size, class Logger* logger) {
+void save(vector<uint8_t> data, string outputFilename, class Logger* logger) {
     ofstream outfile(outputFilename, ios::out | ios::binary);
     if (!outfile.is_open()) {
         logger->log({"Error: Failed to open file " +
@@ -45,12 +45,8 @@ void save(vector<uint8_t> data, string outputFilename, int size, class Logger* l
         throw "Function save logged error (outfile.is_open()).";
     }
 
-    if (size != 0 && size <= data.size()) {
-        outfile.write(reinterpret_cast<char*>(&data[0]), size);
-    } else {
-        outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
-    }
-
+    outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
+    
     if (outfile.bad()) {
         logger->log({"Error: Failed to write file " + outputFilename});
         outfile.close();

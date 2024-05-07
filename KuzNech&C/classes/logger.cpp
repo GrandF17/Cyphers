@@ -34,9 +34,8 @@ class Logger {
     }
 
     void log(vector<string> logs) {
-        if (!file->is_open()) {
+        if (!file->is_open())
             throw ios_base::failure("File is not open for writing.");
-        }
 
         // writing vector of string to file
         for (auto log : logs) {
