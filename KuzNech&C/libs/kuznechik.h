@@ -46,4 +46,10 @@ vector<uint8_t> encryptOFB(
     const vector<vector<uint8_t>>& keys,
     const vector<uint8_t>& IV);
 vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+
+vector<uint8_t> encryptCBC(
+    const vector<uint8_t>& data,
+    const vector<vector<uint8_t>>& keys,
+    const vector<uint8_t>& IV);
+vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
 #endif

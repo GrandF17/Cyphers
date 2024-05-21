@@ -239,4 +239,55 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint
     return result;
 }
 
+vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
+                           const vector<vector<uint8_t>>& keys,
+                           const vector<uint8_t>& IV) {
+    Kuznechik kuz;
+
+    vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
+    vector<uint8_t> feedback = IV;
+    vector<uint8_t> encryptedData;
+
+    for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+        vector<uint8_t> gamma;
+        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+            gamma.push_back(data[i + j] ^ feedback[j]);
+
+        feedback = kuz.encrypt(gamma, keys);  // update output feedback
+        for  (auto byte : feedback)
+            encryptedData.push_back(byte);
+    }
+
+    // got such data space managment:
+    // [[...size_of_file], [...IV], [...encryptedData]]
+    vector<uint8_t> result(size.size() + feedback.size() + encryptedData.size());
+    copy(size.begin(), size.end(), result.begin());
+    copy(IV.begin(), IV.end(), result.begin() + size.size());
+    copy(encryptedData.begin(), encryptedData.end(), result.begin() + size.size() + feedback.size());
+
+    return result;
+}
+
+vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys) {
+    Kuznechik kuz;
+    vector<uint8_t> result;
+
+    // extract a row vector - the final encrypted value of the transferred IV
+    vector<uint8_t> size(data.begin(), data.begin() + 8);
+    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + KUZ_CONST::BLOCK_SIZE);
+
+    for (int i = 8 + KUZ_CONST::BLOCK_SIZE; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+        vector<uint8_t> cypher(data.begin() + i, data.begin() + i + KUZ_CONST::BLOCK_SIZE);
+        vector<uint8_t> decrypted = kuz.decrypt(cypher, keys);
+
+        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+            result.push_back(decrypted[j] ^ feedback[j]);
+
+        feedback = cypher;
+    }
+
+    result.resize(decode(size));
+    return result;
+}
+
 #endif
