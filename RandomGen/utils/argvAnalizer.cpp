@@ -37,6 +37,7 @@ ProgramParams extractProgramParams(int argc, char** argv) {
 
     params.key->param = getParam(argc, argv, params.key->regPattern);
     params.offset->param = (size_t)stoull(getParam(argc, argv, params.offset->regPattern));
+    params.seqLen->param = (size_t)stoull(getParam(argc, argv, params.seqLen->regPattern));
 
     return params;
 }

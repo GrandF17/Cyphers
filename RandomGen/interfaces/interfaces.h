@@ -34,14 +34,17 @@ class ProgramParams {
    public:
     ArgParam<string>* key;
     ArgParam<size_t>* offset;
+    ArgParam<size_t>* seqLen;
 
     ProgramParams():
           key(new ArgParam<string>(regex("--k=([^\"]*\\.key)"))),
-          offset(new ArgParam<size_t>(regex("--o=([^\"]*)"))) {}
+          offset(new ArgParam<size_t>(regex("--o=([^\"]*)"))),
+          seqLen(new ArgParam<size_t>(regex("--l=([^\"]*)"))) {}
 
     ~ProgramParams() {
         delete key;
         delete offset;
+        delete seqLen;
     }
 };
 

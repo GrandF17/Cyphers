@@ -13,7 +13,13 @@ void save(vector<uint8_t> data, const string& outputFilename) {
         throw "Function save logged error (outfile.is_open()).";
     }
 
-    outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
+    // outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
+    for (uint8_t byte : data) {
+        for (int i = 7; i >= 0; --i) {
+            bool bit = (byte >> i) & 1;
+            outfile << bit;
+        }
+    }
 
     if (outfile.bad()) {
         outfile.close();

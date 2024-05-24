@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
     double balance = -1;
     vector<uint8_t> randomText;
-    size_t randomLen  = 64;
+    size_t randomLen  = params.seqLen->param;
 
     do {
         randomText = rand.genSequence(randomLen);
@@ -33,8 +33,8 @@ int main(int argc, char** argv) {
         
     printVectorAsHex(randomText);
     save(randomText, "random.dat");
+    params.~ProgramParams();
     rand.~Random();
-    cout << "KEK" << endl;
 
     return 0;
 }
