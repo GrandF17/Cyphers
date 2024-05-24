@@ -8,7 +8,7 @@ Parameters you NEED to pass to make it work:
 
 `--l="{SEQ_LEN}"` any sequance length you want
 
-## LINUX
+## LINUX / WINDOWS
 
 How to build (call from root):
 
@@ -21,4 +21,3 @@ How to run:
 ```
 ./main --k="1048576.key" --o="0" --l=1048576
 ```
-### P.S. Can be run only on Unix OSs
