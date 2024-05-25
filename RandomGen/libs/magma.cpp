@@ -2,17 +2,18 @@
 #define MAGMA_LC
 
 #include "magma.h"
-#include <cstring>
-#include <cstdint>
-#include <stdexcept>
+
 #include <algorithm>
+#include <cstdint>
+#include <cstring>
+#include <stdexcept>
 #include <vector>
 
 #include "../interfaces/constants.h"
 
 using namespace std;
 
-uint32_t MagmaLC::getPart(const vector<uint8_t>& key, const size_t& from) {
+uint32_t MagmaLC::extract4Bytes(const vector<uint8_t>& key, const size_t& from) {
     uint32_t part = 0;
     for (size_t i = from; i < from + 4; i++) {
         part += key[i];
@@ -48,20 +49,20 @@ uint64_t MagmaLC::encrypt(uint64_t in, const vector<uint8_t>& masterKey) {
     uint32_t right = in & 0xFFFFFFFF;
 
     for (int i = 0; i < 24; i++) {
-        uint32_t key = getPart(masterKey, (i % 8) * 4);
+        uint32_t key = extract4Bytes(masterKey, (i % 8) * 4);
         G(left, right, key);
     }
 
     for (int i = 24; i < 31; i++) {
-        uint32_t key = getPart(masterKey, (7 - (i % 8)) * 4);
+        uint32_t key = extract4Bytes(masterKey, (7 - (i % 8)) * 4);
         G(left, right, key);
     }
 
-    return G_final(left, right, getPart(masterKey, 0));
+    return GFin(left, right, extract4Bytes(masterKey, 0));
 }
 
 void MagmaLC::G(uint32_t& left, uint32_t& right, const uint32_t& key) {
-    uint32_t swap_tmp = right;
+    uint32_t swapTemp = right;
     right += key;
     uint32_t sboxOut = 0;
 
@@ -70,11 +71,11 @@ void MagmaLC::G(uint32_t& left, uint32_t& right, const uint32_t& key) {
 
     right = (sboxOut << 11) | ((sboxOut >> 21) & 0x07FF);
     right ^= left;
-    left = swap_tmp;
+    left = swapTemp;
 }
 
-uint64_t MagmaLC::G_final(uint32_t& left, uint32_t& right, const uint32_t& key) {
-    uint32_t swap_tmp = right;
+uint64_t MagmaLC::GFin(uint32_t& left, uint32_t& right, const uint32_t& key) {
+    uint32_t swapTemp = right;
     right += key;
     uint32_t sboxOut = 0;
 
@@ -84,7 +85,7 @@ uint64_t MagmaLC::G_final(uint32_t& left, uint32_t& right, const uint32_t& key) 
     right = (sboxOut << 11) | ((sboxOut >> 21) & 0x07FF);
     right ^= left;
 
-    return (uint64_t(right) << 32) | swap_tmp;
+    return (uint64_t(right) << 32) | swapTemp;
 }
 
 #endif
