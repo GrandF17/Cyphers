@@ -69,6 +69,8 @@ vector<uint8_t> Random::genGamma() {
     return gamma;
 }
 
+///////////////////////////////
+
 Random::Random() : seed(Key("./1048576.key", 0, 32)) {}
 Random::Random(const size_t& offset) : seed(Key("./1048576.key", 0, 32)) {}
 Random::Random(const string& keyFile, const size_t& offset) : seed(Key(keyFile, offset, 32)) {}
