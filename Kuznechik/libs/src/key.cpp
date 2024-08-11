@@ -37,7 +37,7 @@ vector<vector<uint8_t>> Key::constants() {
 /**
  * reading file, that contains bit sequence, to create key
  */
-vector<uint8_t> Key::readKey(const string& filename, size_t fileShift = 0) {
+vector<uint8_t> Key::readKey(const string& filename, size_t fileShift) {
     ifstream file(filename, ios::binary);
     if (!file.is_open()) {
         cerr << "Error opening file: " << filename << endl;
@@ -124,7 +124,7 @@ vector<vector<uint8_t>> Key::leftAndRight(const string& filename, size_t fileShi
  * default value = "./1048576.key"
  * @param offset offset in the key file [...key(size)]
  */
-Key::Key(const string fileName = "./1048576.key", const size_t offset = 0)
+Key::Key(const string fileName, const size_t offset)
     : masterKey(make_unique<vector<vector<uint8_t>>>(leftAndRight(fileName, offset))),
       keys(make_unique<vector<vector<uint8_t>>>(expandKey((*masterKey)[0], (*masterKey)[1]))) {}
 
