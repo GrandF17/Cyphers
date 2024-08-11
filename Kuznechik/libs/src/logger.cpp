@@ -1,7 +1,7 @@
 #ifndef KUZNECHIK_LIBS_SRC_LOGGER_CPP_INCLUDED
 #define KUZNECHIK_LIBS_SRC_LOGGER_CPP_INCLUDED
 
-#include "libs/include/logger.h"
+#include "../include/logger.h"
 
 #include <fstream>
 #include <iomanip>
@@ -9,7 +9,7 @@
 #include <sstream>
 #include <vector>
 
-#include "utils/time.cpp"
+#include "../../utils/time.cpp"
 
 using namespace std;
 

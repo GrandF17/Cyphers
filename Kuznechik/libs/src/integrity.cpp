@@ -2,7 +2,7 @@
 #ifndef KUZNECHIK_LIBS_SRC_INTEGRITY_CPP_INCLUDED
 #define KUZNECHIK_LIBS_SRC_INTEGRITY_CPP_INCLUDED
 
-#include "libs/include/integrity.h"
+#include "../include/integrity.h"
 
 #include <atomic>
 #include <chrono>
@@ -12,8 +12,8 @@
 #include <thread>
 #include <vector>
 
-#include "libs/include/logger.h"
-#include "libs/include/md5.h"
+#include "../include/logger.h"
+#include "../include/md5.h"
 
 using namespace std;
 

@@ -1,15 +1,15 @@
 #ifndef KUZNECHIK_LIBS_SRC_KUZNECHIK_CPP_INCLUDED
 #define KUZNECHIK_LIBS_SRC_KUZNECHIK_CPP_INCLUDED
 
-#include "libs/include/kuznechik.h"
+#include "../include/kuznechik.h"
 
 #include <cstdint>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 
+#include "../include/params.h"
 #include "constants.h"
-#include "libs/include/params.h"
 
 using namespace std;
 

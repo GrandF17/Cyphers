@@ -2,7 +2,7 @@
 #ifndef KUZNECHIK_LIBS_KEY_GENERATION_SRC_KEY_CPP_INCLUDED
 #define KUZNECHIK_LIBS_KEY_GENERATION_SRC_KEY_CPP_INCLUDED
 
-#include "libs/include/key.h"
+#include "../include/key.h"
 
 #include <cstdint>
 #include <cstring>
@@ -11,8 +11,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../include/kuznechik.h"
 #include "constants.h"
-#include "libs/include/kuznechik.h"
 
 using namespace std;
 

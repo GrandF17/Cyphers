@@ -6,15 +6,15 @@
 #include <regex>
 #include <vector>
 
-#include "libs/include/integrity.h"
-#include "libs/include/key.h"
-#include "libs/include/kuznechik.h"
-#include "libs/include/logger.h"
-#include "libs/include/md5.h"
-#include "libs/include/params.h"
-#include "tests/tests.cpp"
-#include "utils/files.cpp"
-#include "utils/time.cpp"
+#include "./libs/include/integrity.h"
+#include "./libs/include/key.h"
+#include "./libs/include/kuznechik.h"
+#include "./libs/include/logger.h"
+#include "./libs/include/md5.h"
+#include "./libs/include/params.h"
+#include "./tests/tests.cpp"
+#include "./utils/files.cpp"
+#include "./utils/time.cpp"
 
 using namespace std;
 
