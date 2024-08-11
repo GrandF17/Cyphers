@@ -9,8 +9,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../../constants.h"
 #include "../include/kuznechik.h"
-#include "constants.h"
 
 using namespace std;
 

@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../../constants.h"
 #include "../include/params.h"
-#include "constants.h"
 
 using namespace std;
 
