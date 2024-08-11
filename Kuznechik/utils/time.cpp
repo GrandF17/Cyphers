@@ -7,9 +7,7 @@
 #include <cstdint>
 #include <string>
 
-using namespace std;
-
-string dateString() {
+inline std::string dateString() {
     time_t now = time(0);
     tm* localTime = localtime(&now);
     char timeString[80];
