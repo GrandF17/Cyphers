@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <vector>
 
-#include "../include/key.h"
-#include "../include/kuznechik.h"
+#include "../libs/include/key.h"
+#include "../libs/include/kuznechik.h"
 
 using namespace std;
 
