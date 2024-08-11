@@ -6,15 +6,15 @@
 #include <regex>
 #include <vector>
 
-#include "./classes/integrity.cpp"
-#include "./classes/key.cpp"
-#include "./classes/logger.cpp"
-#include "./interfaces/interfaces.h"
-#include "./libs/kuznechik.h"
-#include "./tests/tests.cpp"
-#include "./utils/argvAnalizer.cpp"
-#include "./utils/files.cpp"
-#include "./utils/time.cpp"
+#include "libs/include/integrity.h"
+#include "libs/include/key.h"
+#include "libs/include/kuznechik.h"
+#include "libs/include/logger.h"
+#include "libs/include/md5.h"
+#include "libs/include/params.h"
+#include "tests/tests.cpp"
+#include "utils/files.cpp"
+#include "utils/time.cpp"
 
 using namespace std;
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     /**
      * main class that copntains all arguments
      */
-    ProgramParams params = extractProgramParams(argc, argv);
+    ProgramParams params(argc, argv);
     Logger logger = Logger(params.logFile->param, false);
     IntegrityControl watcher;
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
      * recount checksum only if user set special parameter in argv
      * and exit program (use only if YOU CHANGED somthing in final program)
      */
-    if (params.countChecksum->param) {
+    if (params.recountCheksum->param) {
         watcher.createReferenceFile(argv, &logger);
         exit(0);
     }

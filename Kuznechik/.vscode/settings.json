@@ -71,6 +71,8 @@
     "xtree": "cpp",
     "xutility": "cpp",
     "random": "cpp",
-    "csignal": "cpp"
+    "csignal": "cpp",
+    "*.tcc": "cpp",
+    "bitset": "cpp"
   }
 }

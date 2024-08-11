@@ -1,5 +1,5 @@
-#ifndef KUZNECHIK_H
-#define KUZNECHIK_H
+#ifndef KUZNECHIK_LIBS_INCLUDE_KUZNECHIK_H_INCLUDED
+#define KUZNECHIK_LIBS_INCLUDE_KUZNECHIK_H_INCLUDED
 
 #include <cstring>
 #include <iostream>
@@ -20,7 +20,7 @@ class Kuznechik {
 
    private:
     /**
-     * using only COPY of digits, because the function works with them
+     * using vars' COPY --> func changes their value
      */
     static inline uint8_t gfMul(uint8_t a, uint8_t b);
 
@@ -52,4 +52,5 @@ vector<uint8_t> encryptCBC(
     const vector<vector<uint8_t>>& keys,
     const vector<uint8_t>& IV);
 vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+
 #endif

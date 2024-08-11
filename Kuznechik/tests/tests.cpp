@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <vector>
 
-#include "../classes/key.cpp"
-#include "../libs/kuznechik.h"
+#include "libs/include/key.h"
+#include "libs/include/kuznechik.h"
 
 using namespace std;
 
@@ -65,6 +65,7 @@ bool test() {
     Key keygen;
     size_t total = 2;
     size_t passed = 0;
+
     vector<vector<uint8_t>> masterKey = {
         {0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
          0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77},

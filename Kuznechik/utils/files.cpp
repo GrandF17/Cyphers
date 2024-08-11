@@ -1,11 +1,11 @@
-#ifndef FILES
-#define FILES
+#ifndef KUZNECHIK_UTILS_FILES_CPP_INCLUDED
+#define KUZNECHIK_UTILS_FILES_CPP_INCLUDED
 
 #include <fstream>
 #include <string>
 #include <vector>
 
-#include "../classes/logger.cpp"
+#include "libs/include/logger.h"
 
 using namespace std;
 
@@ -46,7 +46,7 @@ void save(vector<uint8_t> data, string outputFilename, class Logger* logger) {
     }
 
     outfile.write(reinterpret_cast<char*>(&data[0]), data.size());
-    
+
     if (outfile.bad()) {
         logger->log({"Error: Failed to write file " + outputFilename});
         outfile.close();

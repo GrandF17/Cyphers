@@ -1,5 +1,5 @@
-#ifndef TIME
-#define TIME
+#ifndef KUZNECHIK_UTILS_TIME_CPP_INCLUDED
+#define KUZNECHIK_UTILS_TIME_CPP_INCLUDED
 
 #include <string.h>
 #include <time.h>

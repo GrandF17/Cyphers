@@ -1,15 +1,15 @@
-#ifndef KUZNECHIK
-#define KUZNECHIK
+#ifndef KUZNECHIK_LIBS_SRC_KUZNECHIK_CPP_INCLUDED
+#define KUZNECHIK_LIBS_SRC_KUZNECHIK_CPP_INCLUDED
 
-#include "./kuznechik.h"
+#include "libs/include/kuznechik.h"
 
 #include <cstdint>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 
-#include "../interfaces/constants.h"
-#include "../interfaces/interfaces.h"
+#include "constants.h"
+#include "libs/include/params.h"
 
 using namespace std;
 
@@ -48,7 +48,7 @@ inline vector<uint8_t> Kuznechik::xFunc(const vector<uint8_t>& a, const vector<u
 inline vector<uint8_t> Kuznechik::sFunc(const vector<uint8_t>& a) {
     vector<uint8_t> b;
     for (auto byte : a)
-        b.push_back(KUZ_CONST::SBOX[byte]);
+        b.push_back(constants::SBOX[byte]);
 
     return b;
 }
@@ -56,21 +56,21 @@ inline vector<uint8_t> Kuznechik::sFunc(const vector<uint8_t>& a) {
 inline vector<uint8_t> Kuznechik::sFuncInv(const vector<uint8_t>& a) {
     vector<uint8_t> b;
     for (auto byte : a)
-        b.push_back(KUZ_CONST::INV_SBOX[byte]);
+        b.push_back(constants::INV_SBOX[byte]);
 
     return b;
 }
 
 inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
     uint8_t a_15 = 0x00;
-    vector<uint8_t> internal(KUZ_CONST::BLOCK_SIZE);
+    vector<uint8_t> internal(constants::BLOCK_SIZE);
 
     for (int i = 15; i >= 0; i--) {
         if (i == 0)
             internal[15] = a[0];
         else
             internal[i - 1] = a[i];
-        a_15 ^= gfMul(a[i], KUZ_CONST::LIN_VEC[i]);
+        a_15 ^= gfMul(a[i], constants::LIN_VEC[i]);
     }
 
     internal[15] = a_15;
@@ -78,12 +78,12 @@ inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
 }
 
 inline vector<uint8_t> Kuznechik::rFuncInv(const vector<uint8_t>& a) {
-    vector<uint8_t> internal(KUZ_CONST::BLOCK_SIZE);
+    vector<uint8_t> internal(constants::BLOCK_SIZE);
     uint8_t a_0 = a[15];
 
-    for (int i = 1; i < KUZ_CONST::BLOCK_SIZE; i++) {
+    for (int i = 1; i < constants::BLOCK_SIZE; i++) {
         internal[i] = a[i - 1];
-        a_0 ^= gfMul(internal[i], KUZ_CONST::LIN_VEC[i]);
+        a_0 ^= gfMul(internal[i], constants::LIN_VEC[i]);
     }
 
     internal[0] = a_0;
@@ -92,7 +92,7 @@ inline vector<uint8_t> Kuznechik::rFuncInv(const vector<uint8_t>& a) {
 
 inline vector<uint8_t> Kuznechik::lFunc(const vector<uint8_t>& a) {
     vector<uint8_t> b = a;
-    for (size_t i = 0; i < KUZ_CONST::BLOCK_SIZE; i++)
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
         b = rFunc(b);
 
     return b;
@@ -100,7 +100,7 @@ inline vector<uint8_t> Kuznechik::lFunc(const vector<uint8_t>& a) {
 
 inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
     vector<uint8_t> b = a;
-    for (size_t i = 0; i < KUZ_CONST::BLOCK_SIZE; i++)
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
         b = rFuncInv(b);
 
     return b;
@@ -109,7 +109,7 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
 //////////////////////////////
 
 vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
-    if (block.size() != KUZ_CONST::BLOCK_SIZE) throw "Block size incorrect (encript)";
+    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encript)";
     vector<uint8_t> cypherText = block;
 
     for (size_t i = 0; i < 9; i++) {
@@ -123,7 +123,7 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
 }
 
 vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
-    if (block.size() != KUZ_CONST::BLOCK_SIZE) throw "Block size incorrect (decript)";
+    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decript)";
     vector<uint8_t> plaintext = block;
 
     plaintext = xFunc(plaintext, keys[9]);
@@ -202,9 +202,9 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
-    for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+    for (int i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+        for (int j = 0; j < constants::BLOCK_SIZE; j++)
             encryptedData.push_back(data[i + j] ^ blockResult[j]);
 
         feedback = blockResult;  // update output feedback
@@ -225,11 +225,11 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint
 
     // extract a row vector - the final encrypted value of the transferred IV
     vector<uint8_t> size(data.begin(), data.begin() + 8);
-    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + KUZ_CONST::BLOCK_SIZE);
+    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + constants::BLOCK_SIZE);
 
-    for (int i = 8 + KUZ_CONST::BLOCK_SIZE; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+    for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; ++j)
+        for (int j = 0; j < constants::BLOCK_SIZE; ++j)
             result.push_back(data[i + j] ^ blockResult[j]);
 
         feedback = blockResult;  // update output feedback
@@ -248,13 +248,13 @@ vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
-    for (int i = 0; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
+    for (int i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> gamma;
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+        for (int j = 0; j < constants::BLOCK_SIZE; j++)
             gamma.push_back(data[i + j] ^ feedback[j]);
 
         feedback = kuz.encrypt(gamma, keys);  // update output feedback
-        for  (auto byte : feedback)
+        for (auto byte : feedback)
             encryptedData.push_back(byte);
     }
 
@@ -274,13 +274,13 @@ vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint
 
     // extract a row vector - the final encrypted value of the transferred IV
     vector<uint8_t> size(data.begin(), data.begin() + 8);
-    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + KUZ_CONST::BLOCK_SIZE);
+    vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + constants::BLOCK_SIZE);
 
-    for (int i = 8 + KUZ_CONST::BLOCK_SIZE; i < data.size(); i += KUZ_CONST::BLOCK_SIZE) {
-        vector<uint8_t> cypher(data.begin() + i, data.begin() + i + KUZ_CONST::BLOCK_SIZE);
+    for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
+        vector<uint8_t> cypher(data.begin() + i, data.begin() + i + constants::BLOCK_SIZE);
         vector<uint8_t> decrypted = kuz.decrypt(cypher, keys);
 
-        for (int j = 0; j < KUZ_CONST::BLOCK_SIZE; j++)
+        for (int j = 0; j < constants::BLOCK_SIZE; j++)
             result.push_back(decrypted[j] ^ feedback[j]);
 
         feedback = cypher;

@@ -1,3 +1,6 @@
+#ifndef KUZNECHIK_LIBS_INCLUDE_MD5_H_INCLUDED
+#define KUZNECHIK_LIBS_INCLUDE_MD5_H_INCLUDED
+
 /* MD5
  converted to C++ class by Frank Thilo (thilo@unix-ag.org)
  for bzflag (http://www.bzflag.org)
@@ -29,9 +32,6 @@ These notices must be retained in any copies of any part of this
 documentation and/or software.
 
 */
-
-#ifndef BZF_MD5_H
-#define BZF_MD5_H
 
 #include <cstring>
 #include <iostream>
