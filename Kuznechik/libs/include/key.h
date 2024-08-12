@@ -30,8 +30,7 @@ class Key {
     Key(const string fileName = "./1048576.key", const size_t offset = 0);
     ~Key();
 
-    static inline vector<vector<uint8_t>> createTestKey(const vector<uint8_t>& lKey,
-                                                        const vector<uint8_t>& rKey);
+    vector<vector<uint8_t>> createTestKey(const vector<uint8_t>& lKey, const vector<uint8_t>& rKey);
 
    private:
     static inline vector<vector<uint8_t>> constants();
