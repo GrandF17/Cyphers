@@ -108,7 +108,7 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
 
 //////////////////////////////
 
-inline vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encript)";
     vector<uint8_t> cypherText = block;
 
@@ -122,7 +122,7 @@ inline vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const ve
     return cypherText;
 }
 
-inline vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decript)";
     vector<uint8_t> plaintext = block;
 
@@ -140,7 +140,7 @@ inline vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const ve
  * @details runs Feistel transformation for master key
  * to gen round keys (which amount eq to ROUNDS_AMOUNT constant)
  */
-inline vector<vector<uint8_t>> Kuznechik::feistelTransform(
+vector<vector<uint8_t>> Kuznechik::feistelTransform(
     const vector<uint8_t>& lKey,
     const vector<uint8_t>& rKey,
     const vector<uint8_t>& iterator) {

@@ -7,15 +7,16 @@
 using namespace std;
 
 class Logger {
-   private:
-    ofstream* file;  // file where logs will be written
-    bool quietMod;   // true - logs to console, else - not
-
    public:
     Logger(const string fileName, bool _quietMod);
     ~Logger();
 
-    inline void log(const vector<string>& logs);
+    void log(const vector<string>& logs);
+
+   private:
+    ofstream* file;  // file where logs will be written
+    bool quietMod;   // true - logs to console, else - not
+
     static inline string bytesToString(const vector<uint8_t>& logs);
 };
 
