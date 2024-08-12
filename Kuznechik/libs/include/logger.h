@@ -15,8 +15,8 @@ class Logger {
     Logger(const string fileName, bool _quietMod);
     ~Logger();
 
-    void log(const vector<string>& logs);
-    string bytesToString(const vector<uint8_t>& logs);
+    inline void log(const vector<string>& logs);
+    static inline string bytesToString(const vector<uint8_t>& logs);
 };
 
 #endif

@@ -20,9 +20,7 @@ using namespace std;
 IntegrityControl::IntegrityControl() : closeAllThreads(false) {}
 IntegrityControl::~IntegrityControl() {
     closeAllThreads = true;
-    if (checksumThread.joinable()) {
-        checksumThread.join();
-    }
+    if (checksumThread.joinable()) checksumThread.join();
 }
 
 /*
@@ -48,7 +46,7 @@ void IntegrityControl::createReferenceFile(char** argv, class Logger* logger) {
     ofstream hashfile("./checksum.dat", ios::binary);
     hashfile << hashtext;
     hashfile.close();
-    logger->log({"Executable file checksum was written to ./checksum.dat!"});
+    logger->log({"Executable file's checksum was written to ./checksum.dat!"});
 }
 
 string IntegrityControl::fileContentToString(const string& filename) {

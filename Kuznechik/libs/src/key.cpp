@@ -19,7 +19,7 @@ using namespace std;
 /**
  * counting constant values for calculating round keys
  */
-vector<vector<uint8_t>> Key::constants() {
+inline vector<vector<uint8_t>> Key::constants() {
     vector<vector<uint8_t>> constants(32, vector<uint8_t>(constants::BLOCK_SIZE));
 
     for (int i = 0; i < 32; i++) {
@@ -37,7 +37,7 @@ vector<vector<uint8_t>> Key::constants() {
 /**
  * reading file, that contains bit sequence, to create key
  */
-vector<uint8_t> Key::readKey(const string& filename, size_t fileShift) {
+inline vector<uint8_t> Key::readKey(const string& filename, const size_t& fileShift) {
     ifstream file(filename, ios::binary);
     if (!file.is_open()) {
         cerr << "Error opening file: " << filename << endl;
@@ -80,7 +80,7 @@ vector<uint8_t> Key::readKey(const string& filename, size_t fileShift) {
  * @details generates round keys for their further usage in xFunc
  * based on Feistel transformation
  */
-vector<vector<uint8_t>> Key::expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
+inline vector<vector<uint8_t>> Key::expandKey(const vector<uint8_t>& lKey, const vector<uint8_t>& rKey) {
     Kuznechik kuz;
     vector<vector<uint8_t>> key(constants::ROUNDS_AMOUNT, vector<uint8_t>(64));
     vector<vector<uint8_t>> iterK = constants();
@@ -110,7 +110,7 @@ vector<vector<uint8_t>> Key::expandKey(vector<uint8_t> lKey, vector<uint8_t> rKe
     return key;
 }
 
-vector<vector<uint8_t>> Key::leftAndRight(const string& filename, size_t fileShift) {
+inline vector<vector<uint8_t>> Key::leftAndRight(const string& filename, const size_t& fileShift) {
     vector<uint8_t> masterKey = readKey(filename, fileShift);
 
     vector<uint8_t> leftHalf(masterKey.begin(), masterKey.begin() + constants::MASTER_KEY_BYTES / 2);
@@ -118,6 +118,8 @@ vector<vector<uint8_t>> Key::leftAndRight(const string& filename, size_t fileShi
 
     return {leftHalf, rightHalf};
 }
+
+//////////////////////////////////////////
 
 /**
  * @param fileName file where to get from data for key creation,
@@ -132,7 +134,9 @@ Key::~Key() = default;
 
 //////////////////////////////////////////
 /// additional functionality for tests ///
-vector<vector<uint8_t>> Key::createTestKey(vector<uint8_t> lKey, vector<uint8_t> rKey) {
+
+inline vector<vector<uint8_t>> Key::createTestKey(const vector<uint8_t>& lKey,
+                                                  const vector<uint8_t>& rKey) {
     return expandKey(lKey, rKey);
 }
 

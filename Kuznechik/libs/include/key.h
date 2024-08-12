@@ -30,13 +30,14 @@ class Key {
     Key(const string fileName = "./1048576.key", const size_t offset = 0);
     ~Key();
 
-    vector<vector<uint8_t>> createTestKey(vector<uint8_t> lKey, vector<uint8_t> rKey);
+    static inline vector<vector<uint8_t>> createTestKey(const vector<uint8_t>& lKey,
+                                                        const vector<uint8_t>& rKey);
 
    private:
-    vector<vector<uint8_t>> constants();
-    vector<uint8_t> readKey(const string& filename, size_t fileShift = 0);
-    vector<vector<uint8_t>> expandKey(vector<uint8_t> lKey, vector<uint8_t> rKey);
-    vector<vector<uint8_t>> leftAndRight(const string& filename, size_t fileShift);
+    static inline vector<vector<uint8_t>> constants();
+    static inline vector<uint8_t> readKey(const string& filename, const size_t& fileShift = 0);
+    static inline vector<vector<uint8_t>> expandKey(const vector<uint8_t>& lKey, const vector<uint8_t>& rKey);
+    static inline vector<vector<uint8_t>> leftAndRight(const string& filename, const size_t& fileShift);
 };
 
 #endif
