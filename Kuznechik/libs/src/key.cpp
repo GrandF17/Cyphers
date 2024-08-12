@@ -135,8 +135,8 @@ Key::~Key() = default;
 //////////////////////////////////////////
 /// additional functionality for tests ///
 
-inline vector<vector<uint8_t>> Key::createTestKey(const vector<uint8_t>& lKey,
-                                                  const vector<uint8_t>& rKey) {
+vector<vector<uint8_t>> Key::createTestKey(const vector<uint8_t>& lKey,
+                                           const vector<uint8_t>& rKey) {
     return expandKey(lKey, rKey);
 }
 
