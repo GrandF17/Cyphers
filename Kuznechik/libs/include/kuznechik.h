@@ -41,16 +41,16 @@ class Kuznechik {
  * BUT when we decrypt data contains IV as first 16 bytes
  * so there is no need to pass IV inside function
  */
-static inline vector<uint8_t> encryptOFB(
+vector<uint8_t> encryptOFB(
     const vector<uint8_t>& data,
     const vector<vector<uint8_t>>& keys,
     const vector<uint8_t>& IV);
-static inline vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
 
-static inline vector<uint8_t> encryptCBC(
+vector<uint8_t> encryptCBC(
     const vector<uint8_t>& data,
     const vector<vector<uint8_t>>& keys,
     const vector<uint8_t>& IV);
-static inline vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
 
 #endif

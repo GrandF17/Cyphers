@@ -198,9 +198,9 @@ static inline uint64_t decode(vector<uint8_t> bytes) {
 //////////////////////////////
 ////////// OFB MODE //////////
 
-static inline vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
-                                         const vector<vector<uint8_t>>& keys,
-                                         const vector<uint8_t>& IV) {
+vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
+                           const vector<vector<uint8_t>>& keys,
+                           const vector<uint8_t>& IV) {
     Kuznechik kuz;
 
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
@@ -224,8 +224,8 @@ static inline vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
     return result;
 }
 
-static inline vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
-                                         const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
+                           const vector<vector<uint8_t>>& keys) {
     Kuznechik kuz;
     vector<uint8_t> result;
 
@@ -248,9 +248,9 @@ static inline vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
 //////////////////////////////
 ////////// CBC MODE //////////
 
-static inline vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
-                                         const vector<vector<uint8_t>>& keys,
-                                         const vector<uint8_t>& IV) {
+vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
+                           const vector<vector<uint8_t>>& keys,
+                           const vector<uint8_t>& IV) {
     Kuznechik kuz;
 
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
@@ -277,8 +277,8 @@ static inline vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
     return result;
 }
 
-static inline vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
-                                         const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
+                           const vector<vector<uint8_t>>& keys) {
     Kuznechik kuz;
     vector<uint8_t> result;
 
