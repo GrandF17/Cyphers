@@ -11,15 +11,12 @@ class Kuznechik {
    public:
     Kuznechik();
 
-    static inline vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-    static inline vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-    static inline vector<vector<uint8_t>> feistelTransform(
+    vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+    vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+    vector<vector<uint8_t>> feistelTransform(
         const vector<uint8_t>& lKey,
         const vector<uint8_t>& rKey,
         const vector<uint8_t>& iterator);
-
-    static inline vector<uint8_t> rFunc(const vector<uint8_t>& a);
-    static inline vector<uint8_t> rFuncInv(const vector<uint8_t>& a);
 
    private:
     /**
@@ -31,6 +28,9 @@ class Kuznechik {
 
     static inline vector<uint8_t> sFunc(const vector<uint8_t>& a);
     static inline vector<uint8_t> sFuncInv(const vector<uint8_t>& a);
+
+    static inline vector<uint8_t> rFunc(const vector<uint8_t>& a);
+    static inline vector<uint8_t> rFuncInv(const vector<uint8_t>& a);
 
     static inline vector<uint8_t> lFunc(const vector<uint8_t>& a);
     static inline vector<uint8_t> lFuncInv(const vector<uint8_t>& a);
