@@ -13,7 +13,7 @@
 
 using namespace std;
 
-inline void Logger::log(const vector<string>& logs) {
+void Logger::log(const vector<string>& logs) {
     if (!file->is_open())
         throw ios_base::failure("File is not open for writing.");
 
@@ -29,7 +29,7 @@ inline void Logger::log(const vector<string>& logs) {
 /**
  * addititional functionality
  */
-inline string Logger::bytesToString(const vector<uint8_t>& logs) {
+string Logger::bytesToString(const vector<uint8_t>& logs) {
     stringstream ss;
     ss << hex << setfill('0');
     for (const auto& byte : logs) {
