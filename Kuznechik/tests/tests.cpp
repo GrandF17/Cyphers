@@ -12,10 +12,7 @@
 using namespace std;
 
 bool compareVectors(const vector<uint8_t>& vec1, const vector<uint8_t>& vec2) {
-    if (vec1.size() != vec2.size()) {
-        return false;
-    }
-
+    if (vec1.size() != vec2.size()) return false;
     return equal(vec1.begin(), vec1.end(), vec2.begin());
 }
 

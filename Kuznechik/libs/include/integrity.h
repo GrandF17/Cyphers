@@ -15,7 +15,7 @@ class IntegrityControl {
     IntegrityControl();
     ~IntegrityControl();
 
-    void startChecksumChecker(char** argv, class Logger* logger);
+    void startChecksumWatcher(char** argv, class Logger* logger);
     void verifyOnStart(char** argv, class Logger* logger);
     void createReferenceFile(char** argv, class Logger* logger);
 
@@ -25,7 +25,7 @@ class IntegrityControl {
 
     string fileContentToString(const string& filename);
 
-    void checksumChecker(char** argv, class Logger* logger);
+    void checksumWatcher(char** argv, class Logger* logger);
     void verification(char** argv, class Logger* logger);
 };
 

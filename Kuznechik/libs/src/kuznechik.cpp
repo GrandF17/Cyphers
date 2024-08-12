@@ -108,7 +108,7 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
 
 //////////////////////////////
 
-vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+inline vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encript)";
     vector<uint8_t> cypherText = block;
 
@@ -122,7 +122,7 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
     return cypherText;
 }
 
-vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+inline vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decript)";
     vector<uint8_t> plaintext = block;
 
@@ -140,7 +140,7 @@ vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<ve
  * @details runs Feistel transformation for master key
  * to gen round keys (which amount eq to ROUNDS_AMOUNT constant)
  */
-vector<vector<uint8_t>> Kuznechik::feistelTransform(
+inline vector<vector<uint8_t>> Kuznechik::feistelTransform(
     const vector<uint8_t>& lKey,
     const vector<uint8_t>& rKey,
     const vector<uint8_t>& iterator) {
@@ -159,12 +159,14 @@ vector<vector<uint8_t>> Kuznechik::feistelTransform(
 
     return key;
 }
+//////////////////////////////
 
 Kuznechik::Kuznechik() {}
 
 //////////////////////////////
+////////// HELPERS ///////////
 
-vector<uint8_t> encode(uint64_t number) {
+static inline vector<uint8_t> encode(uint64_t number) {
     vector<uint8_t> bytes(8, 0x00);
     vector<uint8_t> tmp;  // stores only bytes on bumber (probably less than 64)
 
@@ -179,7 +181,7 @@ vector<uint8_t> encode(uint64_t number) {
     return bytes;
 }
 
-uint64_t decode(vector<uint8_t> bytes) {
+static inline uint64_t decode(vector<uint8_t> bytes) {
     if (bytes.size() > sizeof(uint64_t)) {
         cerr << "Error: Vector size exceeds uint64_t size!" << endl;
         return 0;
@@ -193,9 +195,12 @@ uint64_t decode(vector<uint8_t> bytes) {
     return number;
 }
 
-vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys,
-                           const vector<uint8_t>& IV) {
+//////////////////////////////
+////////// OFB MODE //////////
+
+static inline vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
+                                         const vector<vector<uint8_t>>& keys,
+                                         const vector<uint8_t>& IV) {
     Kuznechik kuz;
 
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
@@ -219,7 +224,8 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
     return result;
 }
 
-vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys) {
+static inline vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
+                                         const vector<vector<uint8_t>>& keys) {
     Kuznechik kuz;
     vector<uint8_t> result;
 
@@ -239,9 +245,12 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint
     return result;
 }
 
-vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys,
-                           const vector<uint8_t>& IV) {
+//////////////////////////////
+////////// CBC MODE //////////
+
+static inline vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
+                                         const vector<vector<uint8_t>>& keys,
+                                         const vector<uint8_t>& IV) {
     Kuznechik kuz;
 
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
@@ -268,7 +277,8 @@ vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
     return result;
 }
 
-vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys) {
+static inline vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
+                                         const vector<vector<uint8_t>>& keys) {
     Kuznechik kuz;
     vector<uint8_t> result;
 

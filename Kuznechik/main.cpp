@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
         watcher.createReferenceFile(argv, &logger);
         exit(0);
     }
+
     /**
      * importaint check of executable file (main.exe)
      */

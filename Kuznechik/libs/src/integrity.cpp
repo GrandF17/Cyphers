@@ -28,8 +28,8 @@ IntegrityControl::~IntegrityControl() {
 /*
  * periodic verification in the stream (thread)
  */
-void IntegrityControl::startChecksumChecker(char** argv, class Logger* logger) {
-    checksumThread = thread(&IntegrityControl::checksumChecker, this, argv, logger);
+void IntegrityControl::startChecksumWatcher(char** argv, class Logger* logger) {
+    checksumThread = thread(&IntegrityControl::checksumWatcher, this, argv, logger);
 }
 
 /*
@@ -68,7 +68,7 @@ string IntegrityControl::fileContentToString(const string& filename) {
     return content;
 }
 
-void IntegrityControl::checksumChecker(char** argv, class Logger* logger) {
+void IntegrityControl::checksumWatcher(char** argv, class Logger* logger) {
     while (!closeAllThreads) {
         verification(argv, logger);
         this_thread::sleep_for(chrono::seconds(3));  // 3 sec delay
