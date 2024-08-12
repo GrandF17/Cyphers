@@ -29,7 +29,7 @@ void Logger::log(const vector<string>& logs) {
 /**
  * addititional functionality
  */
-string Logger::bytesToString(const vector<uint8_t>& logs) {
+inline string Logger::bytesToString(const vector<uint8_t>& logs) {
     stringstream ss;
     ss << hex << setfill('0');
     for (const auto& byte : logs) {

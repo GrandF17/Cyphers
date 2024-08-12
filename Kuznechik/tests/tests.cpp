@@ -59,7 +59,6 @@ bool decriptBlock(vector<vector<uint8_t>> keys) {
 // };
 
 bool test() {
-    Key keygen;
     size_t total = 2;
     size_t passed = 0;
 
@@ -69,7 +68,7 @@ bool test() {
         {0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10,
          0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}};
 
-    vector<vector<uint8_t>> keys = keygen.createTestKey(masterKey[0], masterKey[1]);
+    vector<vector<uint8_t>> keys = Key::createTestKey(masterKey[0], masterKey[1]);
 
     passed += encriptBlock(keys);
     passed += decriptBlock(keys);

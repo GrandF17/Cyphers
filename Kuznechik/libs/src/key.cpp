@@ -81,7 +81,6 @@ inline vector<uint8_t> Key::readKey(const string& filename, const size_t& fileSh
  * based on Feistel transformation
  */
 inline vector<vector<uint8_t>> Key::expandKey(const vector<uint8_t>& lKey, const vector<uint8_t>& rKey) {
-    Kuznechik kuz;
     vector<vector<uint8_t>> key(constants::ROUNDS_AMOUNT, vector<uint8_t>(64));
     vector<vector<uint8_t>> iterK = constants();
 
@@ -94,14 +93,14 @@ inline vector<vector<uint8_t>> Key::expandKey(const vector<uint8_t>& lKey, const
     iter12[1] = rKey;
 
     for (size_t i = 0; i < 4; i++) {
-        iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
-        iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
-        iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
-        iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
-        iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
-        iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
-        iter34 = kuz.feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
-        iter12 = kuz.feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
+        iter34 = Kuznechik::feistelTransform(iter12[0], iter12[1], iterK[0 + 8 * i]);
+        iter12 = Kuznechik::feistelTransform(iter34[0], iter34[1], iterK[1 + 8 * i]);
+        iter34 = Kuznechik::feistelTransform(iter12[0], iter12[1], iterK[2 + 8 * i]);
+        iter12 = Kuznechik::feistelTransform(iter34[0], iter34[1], iterK[3 + 8 * i]);
+        iter34 = Kuznechik::feistelTransform(iter12[0], iter12[1], iterK[4 + 8 * i]);
+        iter12 = Kuznechik::feistelTransform(iter34[0], iter34[1], iterK[5 + 8 * i]);
+        iter34 = Kuznechik::feistelTransform(iter12[0], iter12[1], iterK[6 + 8 * i]);
+        iter12 = Kuznechik::feistelTransform(iter34[0], iter34[1], iterK[7 + 8 * i]);
 
         key[2 * i + 2] = iter12[0];
         key[2 * i + 3] = iter12[1];

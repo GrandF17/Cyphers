@@ -251,8 +251,6 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
 vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
                            const vector<vector<uint8_t>>& keys,
                            const vector<uint8_t>& IV) {
-    Kuznechik kuz;
-
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
@@ -262,7 +260,7 @@ vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
         for (int j = 0; j < constants::BLOCK_SIZE; j++)
             gamma.push_back(data[i + j] ^ feedback[j]);
 
-        feedback = kuz.encrypt(gamma, keys);  // update output feedback
+        feedback = Kuznechik::encrypt(gamma, keys);  // update output feedback
         for (auto byte : feedback)
             encryptedData.push_back(byte);
     }
@@ -279,7 +277,6 @@ vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
 
 vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
                            const vector<vector<uint8_t>>& keys) {
-    Kuznechik kuz;
     vector<uint8_t> result;
 
     // extract a row vector - the final encrypted value of the transferred IV
@@ -288,7 +285,7 @@ vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
 
     for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> cypher(data.begin() + i, data.begin() + i + constants::BLOCK_SIZE);
-        vector<uint8_t> decrypted = kuz.decrypt(cypher, keys);
+        vector<uint8_t> decrypted = Kuznechik::decrypt(cypher, keys);
 
         for (int j = 0; j < constants::BLOCK_SIZE; j++)
             result.push_back(decrypted[j] ^ feedback[j]);

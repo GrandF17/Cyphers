@@ -11,9 +11,12 @@ class Kuznechik {
    public:
     Kuznechik();
 
-    vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-    vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-    vector<vector<uint8_t>> feistelTransform(
+    /**
+      * @param static to call this functiion without class initialization
+      */
+    static vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+    static vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+    static vector<vector<uint8_t>> feistelTransform(
         const vector<uint8_t>& lKey,
         const vector<uint8_t>& rKey,
         const vector<uint8_t>& iterator);
