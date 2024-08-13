@@ -66,10 +66,8 @@ inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
     vector<uint8_t> internal(constants::BLOCK_SIZE);
 
     for (int i = 15; i >= 0; i--) {
-        if (i == 0)
-            internal[15] = a[0];
-        else
-            internal[i - 1] = a[i];
+        if (i == 0) internal[15] = a[0];
+        else internal[i - 1] = a[i];
         a_15 ^= gfMul(a[i], constants::LIN_VEC[i]);
     }
 
@@ -109,7 +107,7 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
 //////////////////////////////
 
 vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
-    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encript)";
+    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encrypt)";
     vector<uint8_t> cypherText = block;
 
     for (size_t i = 0; i < 9; i++) {
@@ -123,7 +121,7 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
 }
 
 vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
-    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decript)";
+    if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decrypt)";
     vector<uint8_t> plaintext = block;
 
     plaintext = xFunc(plaintext, keys[9]);
@@ -159,6 +157,25 @@ vector<vector<uint8_t>> Kuznechik::feistelTransform(
 
     return key;
 }
+
+// L(a) --> L(a1, 0, ..., 0) XOR L(0, a2, ..., 0) XOR ... XORL (0, 0, ..., a16)
+void genRFuncTable() {
+    vector<vector<vector<uint8_t>>> table(
+        constants::BLOCK_SIZE, 
+        vector<vector<uint8_t>>(256, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))
+    );
+
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++) {
+        vector<uint8_t> basisI(constants::BLOCK_SIZE, 0x00);
+
+        for (size_t j = 0; j <= constants::UINT8_MAX; j++) {
+            basisI[i] = static_cast<uint8_t>(j);
+            table[i][j] = lFunc(basisI);
+        }
+    }
+}
+
+
 //////////////////////////////
 
 Kuznechik::Kuznechik() {}

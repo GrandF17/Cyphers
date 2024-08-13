@@ -39,7 +39,7 @@ ProgramParams::ProgramParams(int argc, char** argv)
       key(new Argument<string>(regex("-k=([^\"]*\\.key)"))),
       offset(new Argument<size_t>(regex("-o=([^\"]*)"))),
       logFile(new Argument<string>(regex("-l=([^\"]*)"))),
-      recountCheksum(new Argument<bool>(regex("-cs=([^\"]*)"))) {
+      recountCheksum(new Argument<bool>(regex("-rc=([^\"]*)"))) {
     file->param = getParam(argc, argv, file->regexPattern);
     logFile->param = getParam(argc, argv, logFile->regexPattern);
     key->param = getParam(argc, argv, key->regexPattern);

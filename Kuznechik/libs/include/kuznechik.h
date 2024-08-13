@@ -12,14 +12,18 @@ class Kuznechik {
     Kuznechik();
 
     /**
-      * @param static to call this functiion without class initialization
-      */
+     * @param static to call this functiion without class initialization
+     */
     static vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
     static vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+
     static vector<vector<uint8_t>> feistelTransform(
         const vector<uint8_t>& lKey,
         const vector<uint8_t>& rKey,
         const vector<uint8_t>& iterator);
+
+
+    static void genRFuncTable();
 
    private:
     /**
@@ -40,8 +44,8 @@ class Kuznechik {
 };
 
 /**
- * When we encrypt file need to define IV
- * BUT when we decrypt data contains IV as first 16 bytes
+ * When we encrypt file need to define IV,
+ * BUT when we decrypt, data contains IV as first 16 bytes
  * so there is no need to pass IV inside function
  */
 vector<uint8_t> encryptOFB(
