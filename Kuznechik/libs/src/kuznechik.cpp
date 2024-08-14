@@ -104,6 +104,33 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
     return b;
 }
 
+/**
+ * @details boosted version of S + L functions
+ * L(S(a)) equals SLFunc(a) 
+ */
+inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
+    const vector<vector<vector<uint8_t>>>& tableRef = instance().table;
+    vector<vector<uint8_t>> basis(
+        constants::BLOCK_SIZE, 
+        vector<uint8_t>(constants::BLOCK_SIZE, 0x00)
+    );
+    vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
+
+    // split vector a into a basis:
+    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15), 
+    for (size_t i; i < constants::BLOCK_SIZE; i++) 
+        basis[i][i] = a[i];
+    
+    // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
+    // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++) 
+            b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
+
+
+    return b;
+}
+
 //////////////////////////////
 
 vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
@@ -112,8 +139,9 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
 
     for (size_t i = 0; i < 9; i++) {
         cypherText = xFunc(keys[i], cypherText);
-        cypherText = sFunc(cypherText);
-        cypherText = lFunc(cypherText);
+        // cypherText = sFunc(cypherText);
+        // cypherText = lFunc(cypherText);
+        cypherText = SLFunc(cypherText);
     }
     cypherText = xFunc(cypherText, keys[9]);
 
@@ -133,6 +161,8 @@ vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<ve
 
     return plaintext;
 }
+
+//////////////////////////////
 
 /**
  * @details runs Feistel transformation for master key
@@ -158,27 +188,47 @@ vector<vector<uint8_t>> Kuznechik::feistelTransform(
     return key;
 }
 
-// L(a) --> L(a1, 0, ..., 0) XOR L(0, a2, ..., 0) XOR ... XORL (0, 0, ..., a16)
-void genRFuncTable() {
-    vector<vector<vector<uint8_t>>> table(
+inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncTable() {
+    vector<vector<vector<uint8_t>>> table(vector<vector<vector<uint8_t>>>(
         constants::BLOCK_SIZE, 
-        vector<vector<uint8_t>>(256, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))
-    );
+        vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))
+    ));
 
     for (size_t i = 0; i < constants::BLOCK_SIZE; i++) {
         vector<uint8_t> basisI(constants::BLOCK_SIZE, 0x00);
 
-        for (size_t j = 0; j <= constants::UINT8_MAX; j++) {
+        for (size_t j = 0; j <= UINT8_MAX; j++) {
             basisI[i] = static_cast<uint8_t>(j);
             table[i][j] = lFunc(basisI);
         }
     }
-}
 
+    return table;
+}
 
 //////////////////////////////
 
-Kuznechik::Kuznechik() {}
+Kuznechik::Kuznechik() {
+    // filling transition table to boost L Function
+    table = genLFuncTable();
+
+    // vector<uint8_t> a = {
+    //     0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
+    //     0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
+    // vector<uint8_t> t1 = SLFunc(a);
+    // vector<uint8_t> t2 = lFunc(sFunc(a));
+
+    
+    // for (uint8_t val : t1) {
+    //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
+    // }
+    // cout << endl;
+
+
+    // for (uint8_t val : t2) {
+    //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
+    // }
+}
 
 //////////////////////////////
 ////////// HELPERS ///////////

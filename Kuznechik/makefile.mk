@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -pthread
+CXXFLAGS = -std=c++17 -Wall  -pthread
 SRCDIR = libs/src
 SRCS = $(wildcard $(SRCDIR)/*.cpp)
 MAIN = main.cpp

@@ -12,7 +12,7 @@ constexpr size_t BLOCK_SIZE = 16;        // number of bytes in one block of data
 constexpr size_t ROUNDS_AMOUNT = 10;     // amount of cypher rounds
 constexpr size_t MASTER_KEY_BITS = 256;  // master key (0101010110...)
 constexpr size_t MASTER_KEY_BYTES = 32;  // master key (0xFF, 0x1A, ...)
-constexpr size_t UINT8_MAX  = static_cast<size_t>(numeric_limits<uint8_t>::max()); // from uint8_t (256)
+// constexpr size_t UINT8_MAX  = static_cast<size_t>(numeric_limits<uint8_t>::max()); // from uint8_t (256)
 
 /**
  * @note need to test this SBOX and in case it is not
