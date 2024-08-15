@@ -23,14 +23,15 @@ class Kuznechik {
         const vector<uint8_t>& iterator);
 
    private:
-    vector<vector<vector<uint8_t>>> table;
+    vector<vector<vector<uint8_t>>> tableL;
+    vector<vector<vector<uint8_t>>> tableLInv;
 
-    // to make var "table" accessible from static inline functions
+    // to make var "tableL" and "tableLInv" accessible from static inline functions
     static Kuznechik& instance() {
         static Kuznechik instance;
         return instance;
     }
-    
+
     /**
      * using vars' COPY --> func changes their value
      */
@@ -47,9 +48,11 @@ class Kuznechik {
     static inline vector<uint8_t> lFunc(const vector<uint8_t>& a);
     static inline vector<uint8_t> lFuncInv(const vector<uint8_t>& a);
 
-    // boost for L Func
-    static inline vector<vector<vector<uint8_t>>> genLFuncTable();
-    static inline vector<uint8_t> SLFunc(const vector<uint8_t>& a);
+    // boost for L and S Func-s
+    static inline vector<vector<vector<uint8_t>>> genLFuncTable();     // to encrypt
+    static inline vector<vector<vector<uint8_t>>> genLFuncInvTable();  // to decrypt
+    static inline vector<uint8_t> SLFunc(const vector<uint8_t>& a);    // to encrypt
+    static inline vector<uint8_t> LSFunc(const vector<uint8_t>& a);    // to decrypt
 };
 
 /**

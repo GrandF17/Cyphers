@@ -66,8 +66,10 @@ inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
     vector<uint8_t> internal(constants::BLOCK_SIZE);
 
     for (int i = 15; i >= 0; i--) {
-        if (i == 0) internal[15] = a[0];
-        else internal[i - 1] = a[i];
+        if (i == 0)
+            internal[15] = a[0];
+        else
+            internal[i - 1] = a[i];
         a_15 ^= gfMul(a[i], constants::LIN_VEC[i]);
     }
 
@@ -105,28 +107,51 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
 }
 
 /**
- * @details boosted version of S + L functions
- * L(S(a)) equals SLFunc(a) 
+ * @details boosted version of S + L functions for encryption
+ * L(S(a)) equals SLFunc(a)
  */
 inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
-    const vector<vector<vector<uint8_t>>>& tableRef = instance().table;
+    const vector<vector<vector<uint8_t>>>& tableRef = instance().tableL;
     vector<vector<uint8_t>> basis(
-        constants::BLOCK_SIZE, 
-        vector<uint8_t>(constants::BLOCK_SIZE, 0x00)
-    );
+        constants::BLOCK_SIZE,
+        vector<uint8_t>(constants::BLOCK_SIZE, 0x00));
     vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
 
     // split vector a into a basis:
-    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15), 
-    for (size_t i; i < constants::BLOCK_SIZE; i++) 
+    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15),
+    for (size_t i; i < constants::BLOCK_SIZE; i++)
         basis[i][i] = a[i];
-    
+
     // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
     // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
     for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
-        for (size_t j = 0; j < constants::BLOCK_SIZE; j++) 
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
 
+    return b;
+}
+
+/**
+ * @details boosted version of S + L functions for decryption
+ * S(L(a)) equals LSFunc(a)
+ */
+inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
+    const vector<vector<vector<uint8_t>>>& tableRef = instance().tableLInv;
+    vector<vector<uint8_t>> basis(
+        constants::BLOCK_SIZE,
+        vector<uint8_t>(constants::BLOCK_SIZE, 0x00));
+    vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
+
+    // split vector a into a basis:
+    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15),
+    for (size_t i; i < constants::BLOCK_SIZE; i++)
+        basis[i][i] = a[i];
+
+    // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
+    // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
+            b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
 
     return b;
 }
@@ -190,9 +215,8 @@ vector<vector<uint8_t>> Kuznechik::feistelTransform(
 
 inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncTable() {
     vector<vector<vector<uint8_t>>> table(vector<vector<vector<uint8_t>>>(
-        constants::BLOCK_SIZE, 
-        vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))
-    ));
+        constants::BLOCK_SIZE,
+        vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))));
 
     for (size_t i = 0; i < constants::BLOCK_SIZE; i++) {
         vector<uint8_t> basisI(constants::BLOCK_SIZE, 0x00);
@@ -206,11 +230,29 @@ inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncTable() {
     return table;
 }
 
+inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncInvTable() {
+    vector<vector<vector<uint8_t>>> table(vector<vector<vector<uint8_t>>>(
+        constants::BLOCK_SIZE,
+        vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))));
+
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++) {
+        vector<uint8_t> basisI(constants::BLOCK_SIZE, 0x00);
+
+        for (size_t j = 0; j <= UINT8_MAX; j++) {
+            basisI[i] = static_cast<uint8_t>(j);
+            table[i][j] = lFuncInv(basisI);
+        }
+    }
+
+    return table;
+}
+
 //////////////////////////////
 
 Kuznechik::Kuznechik() {
     // filling transition table to boost L Function
-    table = genLFuncTable();
+    tableL = genLFuncTable();
+    tableLInv = genLFuncInvTable();
 
     // vector<uint8_t> a = {
     //     0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
@@ -218,12 +260,10 @@ Kuznechik::Kuznechik() {
     // vector<uint8_t> t1 = SLFunc(a);
     // vector<uint8_t> t2 = lFunc(sFunc(a));
 
-    
     // for (uint8_t val : t1) {
     //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
     // }
     // cout << endl;
-
 
     // for (uint8_t val : t2) {
     //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
