@@ -12,11 +12,11 @@ class Kuznechik {
     Kuznechik();
 
     /**
-     * @param static to call this functiion without class initialization
+     * @param static to call this functiion without class initialization.
+     * Constructor creates transition tables that increase speed of Kuznechik encrypt/decrypt functions.
      */
     static vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
     static vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-
     static vector<vector<uint8_t>> feistelTransform(
         const vector<uint8_t>& lKey,
         const vector<uint8_t>& rKey,
@@ -49,10 +49,10 @@ class Kuznechik {
     static inline vector<uint8_t> lFuncInv(const vector<uint8_t>& a);
 
     // boost for L and S Func-s
-    static inline vector<vector<vector<uint8_t>>> genLFuncTable();     // to encrypt
-    static inline vector<vector<vector<uint8_t>>> genLFuncInvTable();  // to decrypt
-    static inline vector<uint8_t> SLFunc(const vector<uint8_t>& a);    // to encrypt
-    static inline vector<uint8_t> LSFunc(const vector<uint8_t>& a);    // to decrypt
+    static inline vector<vector<vector<uint8_t>>> genLFuncTable();
+    static inline vector<uint8_t> SLFunc(const vector<uint8_t>& a);
+    static inline vector<vector<vector<uint8_t>>> genLFuncInvTable();
+    static inline vector<uint8_t> LSFunc(const vector<uint8_t>& a);
 };
 
 /**

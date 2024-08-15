@@ -65,42 +65,32 @@ int main(int argc, char** argv) {
     watcher.startChecksumWatcher(argv, &logger);
 
     if (params.mode->param == KuzMod::ENCRIPT) {
-        Key key(params.key->param, params.offset->param);
+        logger.log({"File " + params.file->param + " encrypting..."});
         vector<uint8_t> data = read(params.file->param, &logger);
 
-        logger.log({"File " + params.file->param + " encrypting..."});
-
+        Key key(params.key->param, params.offset->param); // create key
         vector<uint8_t> encrypted = encryptOFB(data, *key.keys, generateIV());
+        key.~Key(); // instantly annihilating Key
 
         string outpuFile = md5(dateString()).append(".ENC");
-        ;
         save(encrypted, outpuFile, &logger);
 
         logger.log({"Ecrypted to: " + outpuFile});
-
-        /**
-         * annihilating Key
-         */
-        key.~Key();
     }
 
     if (params.mode->param == KuzMod::DECRIPT) {
-        Key key(params.key->param, params.offset->param);
+        logger.log({"File " + params.file->param + " decrypting..."});
         vector<uint8_t> data = read(params.file->param, &logger);
 
-        logger.log({"File " + params.file->param + " decrypting..."});
-
+        Key key(params.key->param, params.offset->param); // create key
         vector<uint8_t> decrypted = decryptOFB(data, *key.keys);
+        key.~Key(); // instantly annihilating Key
 
         string outpuFile = md5(dateString()).append(".DEC");
         save(decrypted, outpuFile, &logger);
 
         logger.log({"Decrypted to: " + outpuFile});
-
-        /**
-         * annihilating Key
-         */
-        key.~Key();
+        cout << "KEK" << endl;
     }
 
     if (params.mode->param == KuzMod::TEST) {
@@ -109,6 +99,9 @@ int main(int argc, char** argv) {
         logger.log({allPassed ? "All tests passed!" : "Some tests failed!"});
     }
 
+    cout << "KEK" << endl;
+    logger.~Logger();
     watcher.~IntegrityControl();
+    cout << "LOL" << endl;
     return 0;
 }

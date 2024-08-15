@@ -135,7 +135,7 @@ inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
  * @details boosted version of S + L functions for decryption
  * S(L(a)) equals LSFunc(a)
  */
-inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::LSFunc(const vector<uint8_t>& a) {
     const vector<vector<vector<uint8_t>>>& tableRef = instance().tableLInv;
     vector<vector<uint8_t>> basis(
         constants::BLOCK_SIZE,
@@ -164,8 +164,11 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
 
     for (size_t i = 0; i < 9; i++) {
         cypherText = xFunc(keys[i], cypherText);
-        // cypherText = sFunc(cypherText);
-        // cypherText = lFunc(cypherText);
+
+        /*
+            cypherText = sFunc(cypherText);
+            cypherText = lFunc(cypherText);
+        */ // using SLFunc instead of sFunc + lFunc:
         cypherText = SLFunc(cypherText);
     }
     cypherText = xFunc(cypherText, keys[9]);
@@ -179,8 +182,12 @@ vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<ve
 
     plaintext = xFunc(plaintext, keys[9]);
     for (int i = 8; i >= 0; i--) {
-        plaintext = lFuncInv(plaintext);
-        plaintext = sFuncInv(plaintext);
+        /*
+            plaintext = lFuncInv(plaintext);
+            plaintext = sFuncInv(plaintext);
+        */ // using LSFunc instead of lFuncInv + sFuncInv:
+        plaintext = LSFunc(plaintext);
+
         plaintext = xFunc(keys[i], plaintext);
     }
 
@@ -253,21 +260,6 @@ Kuznechik::Kuznechik() {
     // filling transition table to boost L Function
     tableL = genLFuncTable();
     tableLInv = genLFuncInvTable();
-
-    // vector<uint8_t> a = {
-    //     0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
-    //     0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77};
-    // vector<uint8_t> t1 = SLFunc(a);
-    // vector<uint8_t> t2 = lFunc(sFunc(a));
-
-    // for (uint8_t val : t1) {
-    //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
-    // }
-    // cout << endl;
-
-    // for (uint8_t val : t2) {
-    //     cout << static_cast<int>(val) << " ";  // Преобразуем к int, чтобы избежать вывода как символ
-    // }
 }
 
 //////////////////////////////
@@ -308,14 +300,12 @@ static inline uint64_t decode(vector<uint8_t> bytes) {
 vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
                            const vector<vector<uint8_t>>& keys,
                            const vector<uint8_t>& IV) {
-    Kuznechik kuz;
-
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
     for (int i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
-        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
+        vector<uint8_t> blockResult = Kuznechik::encrypt(feedback, keys);
         for (int j = 0; j < constants::BLOCK_SIZE; j++)
             encryptedData.push_back(data[i + j] ^ blockResult[j]);
 
@@ -333,7 +323,6 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
 
 vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
                            const vector<vector<uint8_t>>& keys) {
-    Kuznechik kuz;
     vector<uint8_t> result;
 
     // extract a row vector - the final encrypted value of the transferred IV
@@ -341,7 +330,7 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
     vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + constants::BLOCK_SIZE);
 
     for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
-        vector<uint8_t> blockResult = kuz.encrypt(feedback, keys);
+        vector<uint8_t> blockResult = Kuznechik::encrypt(feedback, keys);
         for (int j = 0; j < constants::BLOCK_SIZE; ++j)
             result.push_back(data[i + j] ^ blockResult[j]);
 
