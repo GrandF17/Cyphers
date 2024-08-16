@@ -29,7 +29,7 @@ void Logger::log(const vector<string>& logs) {
 /**
  * addititional functionality
  */
-inline string Logger::bytesToString(const vector<uint8_t>& logs) {
+inline string Logger::bytesToString(vector<uint8_t> const& logs) {
     stringstream ss;
     ss << hex << setfill('0');
     for (const auto& byte : logs) {
@@ -52,8 +52,11 @@ Logger::Logger(const string fileName = "./KuznechikLogs.dat", bool _quietMod = t
 }
 
 Logger::~Logger() {
-    file->close();
-    delete file;
+    if (file) {
+        file->close();
+        delete file;
+        file = nullptr;
+    }
 }
 
 #endif

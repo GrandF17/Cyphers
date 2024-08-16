@@ -22,8 +22,8 @@ using namespace std;
 inline vector<vector<uint8_t>> Key::constants() {
     vector<vector<uint8_t>> constants(32, vector<uint8_t>(constants::BLOCK_SIZE));
 
-    for (int i = 0; i < 32; i++) {
-        for (int j = 0; j < constants::BLOCK_SIZE; j++)
+    for (size_t i = 0; i < 32; i++) {
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             constants[i][j] = 0;
         constants[i][0] = (uint8_t)(i + 1);
     }
@@ -80,7 +80,7 @@ inline vector<uint8_t> Key::readKey(const string& filename, const size_t& fileSh
  * @details generates round keys for their further usage in xFunc
  * based on Feistel transformation
  */
-inline vector<vector<uint8_t>> Key::expandKey(const vector<uint8_t>& lKey, const vector<uint8_t>& rKey) {
+inline vector<vector<uint8_t>> Key::expandKey(vector<uint8_t> const& lKey, vector<uint8_t> const& rKey) {
     vector<vector<uint8_t>> key(constants::ROUNDS_AMOUNT, vector<uint8_t>(64));
     vector<vector<uint8_t>> iterK = constants();
 
@@ -134,8 +134,8 @@ Key::~Key() = default;
 //////////////////////////////////////////
 /// additional functionality for tests ///
 
-vector<vector<uint8_t>> Key::createTestKey(const vector<uint8_t>& lKey,
-                                           const vector<uint8_t>& rKey) {
+vector<vector<uint8_t>> Key::createTestKey(vector<uint8_t> const& lKey,
+                                           vector<uint8_t> const& rKey) {
     return expandKey(lKey, rKey);
 }
 

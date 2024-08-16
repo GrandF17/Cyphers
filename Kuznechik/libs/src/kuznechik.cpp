@@ -37,7 +37,7 @@ inline uint8_t Kuznechik::gfMul(uint8_t a, uint8_t b) {
     return c;
 }
 
-inline vector<uint8_t> Kuznechik::xFunc(const vector<uint8_t>& a, const vector<uint8_t>& b) {
+inline vector<uint8_t> Kuznechik::xFunc(vector<uint8_t> const& a, vector<uint8_t> const& b) {
     vector<uint8_t> c;
     for (size_t i = 0; i < a.size(); i++)
         c.push_back(a[i] ^ b[i]);
@@ -45,7 +45,7 @@ inline vector<uint8_t> Kuznechik::xFunc(const vector<uint8_t>& a, const vector<u
     return c;
 }
 
-inline vector<uint8_t> Kuznechik::sFunc(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::sFunc(vector<uint8_t> const& a) {
     vector<uint8_t> b;
     for (auto byte : a)
         b.push_back(constants::SBOX[byte]);
@@ -53,7 +53,7 @@ inline vector<uint8_t> Kuznechik::sFunc(const vector<uint8_t>& a) {
     return b;
 }
 
-inline vector<uint8_t> Kuznechik::sFuncInv(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::sFuncInv(vector<uint8_t> const& a) {
     vector<uint8_t> b;
     for (auto byte : a)
         b.push_back(constants::INV_SBOX[byte]);
@@ -61,7 +61,7 @@ inline vector<uint8_t> Kuznechik::sFuncInv(const vector<uint8_t>& a) {
     return b;
 }
 
-inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::rFunc(vector<uint8_t> const& a) {
     uint8_t a_15 = 0x00;
     vector<uint8_t> internal(constants::BLOCK_SIZE);
 
@@ -77,11 +77,11 @@ inline vector<uint8_t> Kuznechik::rFunc(const vector<uint8_t>& a) {
     return internal;
 }
 
-inline vector<uint8_t> Kuznechik::rFuncInv(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::rFuncInv(vector<uint8_t> const& a) {
     vector<uint8_t> internal(constants::BLOCK_SIZE);
     uint8_t a_0 = a[15];
 
-    for (int i = 1; i < constants::BLOCK_SIZE; i++) {
+    for (size_t i = 1; i < constants::BLOCK_SIZE; i++) {
         internal[i] = a[i - 1];
         a_0 ^= gfMul(internal[i], constants::LIN_VEC[i]);
     }
@@ -90,7 +90,7 @@ inline vector<uint8_t> Kuznechik::rFuncInv(const vector<uint8_t>& a) {
     return internal;
 }
 
-inline vector<uint8_t> Kuznechik::lFunc(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::lFunc(vector<uint8_t> const& a) {
     vector<uint8_t> b = a;
     for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
         b = rFunc(b);
@@ -98,10 +98,33 @@ inline vector<uint8_t> Kuznechik::lFunc(const vector<uint8_t>& a) {
     return b;
 }
 
-inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
+inline vector<uint8_t> Kuznechik::lFuncInv(vector<uint8_t> const& a) {
     vector<uint8_t> b = a;
     for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
         b = rFuncInv(b);
+
+    return b;
+}
+
+inline vector<uint8_t> Kuznechik::mapping(
+    vector<uint8_t> const& a,
+    vector<vector<vector<uint8_t>>> const& tableRef
+) {
+    vector<vector<uint8_t>> basis(
+        constants::BLOCK_SIZE,
+        vector<uint8_t>(constants::BLOCK_SIZE, 0x00));
+    vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
+
+    // split vector a into a basis:
+    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15),
+    for (size_t i; i < constants::BLOCK_SIZE; i++)
+        basis[i][i] = a[i];
+
+    // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
+    // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
+    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
+            b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
 
     return b;
 }
@@ -110,55 +133,21 @@ inline vector<uint8_t> Kuznechik::lFuncInv(const vector<uint8_t>& a) {
  * @details boosted version of S + L functions for encryption
  * L(S(a)) equals SLFunc(a)
  */
-inline vector<uint8_t> Kuznechik::SLFunc(const vector<uint8_t>& a) {
-    const vector<vector<vector<uint8_t>>>& tableRef = instance().tableL;
-    vector<vector<uint8_t>> basis(
-        constants::BLOCK_SIZE,
-        vector<uint8_t>(constants::BLOCK_SIZE, 0x00));
-    vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
-
-    // split vector a into a basis:
-    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15),
-    for (size_t i; i < constants::BLOCK_SIZE; i++)
-        basis[i][i] = a[i];
-
-    // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
-    // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
-    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
-        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
-            b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
-
-    return b;
+inline vector<uint8_t> Kuznechik::SLFunc(vector<uint8_t> const& a) {
+    return mapping(a, instance().tableL);
 }
 
 /**
  * @details boosted version of S + L functions for decryption
  * S(L(a)) equals LSFunc(a)
  */
-inline vector<uint8_t> Kuznechik::LSFunc(const vector<uint8_t>& a) {
-    const vector<vector<vector<uint8_t>>>& tableRef = instance().tableLInv;
-    vector<vector<uint8_t>> basis(
-        constants::BLOCK_SIZE,
-        vector<uint8_t>(constants::BLOCK_SIZE, 0x00));
-    vector<uint8_t> b(constants::BLOCK_SIZE, 0x00);
-
-    // split vector a into a basis:
-    // a --> (a_0, 0, ..., 0), ... (0, 0, ..., a_15),
-    for (size_t i; i < constants::BLOCK_SIZE; i++)
-        basis[i][i] = a[i];
-
-    // table operation for [a_0, 0, 0, ... ,0] equals L(a_0, 0, 0, ... ,0)
-    // and L(a) equals L(a0, 0, ..., 0) XOR L(0, a1, ..., 0) XOR ... XOR L(0, 0, ..., a15)
-    for (size_t i = 0; i < constants::BLOCK_SIZE; i++)
-        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
-            b[j] ^= tableRef[i][constants::SBOX[a[i]]][j];
-
-    return b;
+inline vector<uint8_t> Kuznechik::LSFunc(vector<uint8_t> const& a) {
+    return mapping(a, instance().tableLInv);
 }
 
 //////////////////////////////
 
-vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> Kuznechik::encrypt(vector<uint8_t> const& block, vector<vector<uint8_t>> const& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (encrypt)";
     vector<uint8_t> cypherText = block;
 
@@ -176,7 +165,7 @@ vector<uint8_t> Kuznechik::encrypt(const vector<uint8_t>& block, const vector<ve
     return cypherText;
 }
 
-vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> Kuznechik::decrypt(vector<uint8_t> const& block, vector<vector<uint8_t>> const& keys) {
     if (block.size() != constants::BLOCK_SIZE) throw "Block size incorrect (decrypt)";
     vector<uint8_t> plaintext = block;
 
@@ -201,9 +190,9 @@ vector<uint8_t> Kuznechik::decrypt(const vector<uint8_t>& block, const vector<ve
  * to gen round keys (which amount eq to ROUNDS_AMOUNT constant)
  */
 vector<vector<uint8_t>> Kuznechik::feistelTransform(
-    const vector<uint8_t>& lKey,
-    const vector<uint8_t>& rKey,
-    const vector<uint8_t>& iterator) {
+    vector<uint8_t> const& lKey,
+    vector<uint8_t> const& rKey,
+    vector<uint8_t> const& iterator) {
     vector<uint8_t> internal;
     vector<uint8_t> rKeyOut = lKey;
 
@@ -220,7 +209,8 @@ vector<vector<uint8_t>> Kuznechik::feistelTransform(
     return key;
 }
 
-inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncTable() {
+
+inline vector<vector<vector<uint8_t>>> Kuznechik::genTableFor(Table const& currTable) {
     vector<vector<vector<uint8_t>>> table(vector<vector<vector<uint8_t>>>(
         constants::BLOCK_SIZE,
         vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))));
@@ -230,24 +220,8 @@ inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncTable() {
 
         for (size_t j = 0; j <= UINT8_MAX; j++) {
             basisI[i] = static_cast<uint8_t>(j);
-            table[i][j] = lFunc(basisI);
-        }
-    }
-
-    return table;
-}
-
-inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncInvTable() {
-    vector<vector<vector<uint8_t>>> table(vector<vector<vector<uint8_t>>>(
-        constants::BLOCK_SIZE,
-        vector<vector<uint8_t>>(UINT8_MAX + 1, vector<uint8_t>(constants::BLOCK_SIZE, 0x00))));
-
-    for (size_t i = 0; i < constants::BLOCK_SIZE; i++) {
-        vector<uint8_t> basisI(constants::BLOCK_SIZE, 0x00);
-
-        for (size_t j = 0; j <= UINT8_MAX; j++) {
-            basisI[i] = static_cast<uint8_t>(j);
-            table[i][j] = lFuncInv(basisI);
+            if (currTable == LFunc) table[i][j] = lFunc(basisI);
+            else table[i][j] = lFuncInv(basisI);
         }
     }
 
@@ -258,8 +232,13 @@ inline vector<vector<vector<uint8_t>>> Kuznechik::genLFuncInvTable() {
 
 Kuznechik::Kuznechik() {
     // filling transition table to boost L Function
-    tableL = genLFuncTable();
-    tableLInv = genLFuncInvTable();
+    tableL = genTableFor(LFunc);
+    tableLInv = genTableFor(LFuncInv);
+}
+
+Kuznechik::~Kuznechik() {
+    tableL.clear();
+    tableLInv.clear();
 }
 
 //////////////////////////////
@@ -297,16 +276,16 @@ static inline uint64_t decode(vector<uint8_t> bytes) {
 //////////////////////////////
 ////////// OFB MODE //////////
 
-vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys,
-                           const vector<uint8_t>& IV) {
+vector<uint8_t> encryptOFB(vector<uint8_t> const& data,
+                           vector<vector<uint8_t>> const& keys,
+                           vector<uint8_t> const& IV) {
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
-    for (int i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
+    for (size_t i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> blockResult = Kuznechik::encrypt(feedback, keys);
-        for (int j = 0; j < constants::BLOCK_SIZE; j++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             encryptedData.push_back(data[i + j] ^ blockResult[j]);
 
         feedback = blockResult;  // update output feedback
@@ -317,21 +296,21 @@ vector<uint8_t> encryptOFB(const vector<uint8_t>& data,
     copy(size.begin(), size.end(), result.begin());
     copy(IV.begin(), IV.end(), result.begin() + size.size());
     copy(encryptedData.begin(), encryptedData.end(), result.begin() + size.size() + feedback.size());
-
+    
     return result;
 }
 
-vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> decryptOFB(vector<uint8_t> const& data,
+                           vector<vector<uint8_t>> const& keys) {
     vector<uint8_t> result;
 
     // extract a row vector - the final encrypted value of the transferred IV
     vector<uint8_t> size(data.begin(), data.begin() + 8);
     vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + constants::BLOCK_SIZE);
 
-    for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
+    for (size_t i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> blockResult = Kuznechik::encrypt(feedback, keys);
-        for (int j = 0; j < constants::BLOCK_SIZE; ++j)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             result.push_back(data[i + j] ^ blockResult[j]);
 
         feedback = blockResult;  // update output feedback
@@ -344,16 +323,16 @@ vector<uint8_t> decryptOFB(const vector<uint8_t>& data,
 //////////////////////////////
 ////////// CBC MODE //////////
 
-vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys,
-                           const vector<uint8_t>& IV) {
+vector<uint8_t> encryptCBC(vector<uint8_t> const& data,
+                           vector<vector<uint8_t>> const& keys,
+                           vector<uint8_t> const& IV) {
     vector<uint8_t> size = encode(data.size());  // 64 bits / 8 bytes
     vector<uint8_t> feedback = IV;
     vector<uint8_t> encryptedData;
 
-    for (int i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
+    for (size_t i = 0; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> gamma;
-        for (int j = 0; j < constants::BLOCK_SIZE; j++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             gamma.push_back(data[i + j] ^ feedback[j]);
 
         feedback = Kuznechik::encrypt(gamma, keys);  // update output feedback
@@ -371,19 +350,19 @@ vector<uint8_t> encryptCBC(const vector<uint8_t>& data,
     return result;
 }
 
-vector<uint8_t> decryptCBC(const vector<uint8_t>& data,
-                           const vector<vector<uint8_t>>& keys) {
+vector<uint8_t> decryptCBC(vector<uint8_t> const& data,
+                           vector<vector<uint8_t>> const& keys) {
     vector<uint8_t> result;
 
     // extract a row vector - the final encrypted value of the transferred IV
     vector<uint8_t> size(data.begin(), data.begin() + 8);
     vector<uint8_t> feedback(data.begin() + 8, data.begin() + 8 + constants::BLOCK_SIZE);
 
-    for (int i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
+    for (size_t i = 8 + constants::BLOCK_SIZE; i < data.size(); i += constants::BLOCK_SIZE) {
         vector<uint8_t> cypher(data.begin() + i, data.begin() + i + constants::BLOCK_SIZE);
         vector<uint8_t> decrypted = Kuznechik::decrypt(cypher, keys);
 
-        for (int j = 0; j < constants::BLOCK_SIZE; j++)
+        for (size_t j = 0; j < constants::BLOCK_SIZE; j++)
             result.push_back(decrypted[j] ^ feedback[j]);
 
         feedback = cypher;

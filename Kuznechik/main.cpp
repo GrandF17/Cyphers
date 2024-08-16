@@ -90,7 +90,6 @@ int main(int argc, char** argv) {
         save(decrypted, outpuFile, &logger);
 
         logger.log({"Decrypted to: " + outpuFile});
-        cout << "KEK" << endl;
     }
 
     if (params.mode->param == KuzMod::TEST) {
@@ -99,9 +98,7 @@ int main(int argc, char** argv) {
         logger.log({allPassed ? "All tests passed!" : "Some tests failed!"});
     }
 
-    cout << "KEK" << endl;
-    logger.~Logger();
     watcher.~IntegrityControl();
-    cout << "LOL" << endl;
+    logger.~Logger();
     return 0;
 }

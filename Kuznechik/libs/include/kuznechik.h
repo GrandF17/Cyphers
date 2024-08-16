@@ -10,17 +10,20 @@ using namespace std;
 class Kuznechik {
    public:
     Kuznechik();
+    ~Kuznechik();
+
+    enum Table {LFunc, LFuncInv};
 
     /**
      * @param static to call this functiion without class initialization.
      * Constructor creates transition tables that increase speed of Kuznechik encrypt/decrypt functions.
      */
-    static vector<uint8_t> encrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
-    static vector<uint8_t> decrypt(const vector<uint8_t>& block, const vector<vector<uint8_t>>& keys);
+    static vector<uint8_t> encrypt(vector<uint8_t> const& block, vector<vector<uint8_t>> const& keys);
+    static vector<uint8_t> decrypt(vector<uint8_t> const& block, vector<vector<uint8_t>> const& keys);
     static vector<vector<uint8_t>> feistelTransform(
-        const vector<uint8_t>& lKey,
-        const vector<uint8_t>& rKey,
-        const vector<uint8_t>& iterator);
+        vector<uint8_t> const& lKey,
+        vector<uint8_t> const& rKey,
+        vector<uint8_t> const& iterator);
 
    private:
     vector<vector<vector<uint8_t>>> tableL;
@@ -37,22 +40,24 @@ class Kuznechik {
      */
     static inline uint8_t gfMul(uint8_t a, uint8_t b);
 
-    static inline vector<uint8_t> xFunc(const vector<uint8_t>& a, const vector<uint8_t>& b);
+    static inline vector<uint8_t> xFunc(vector<uint8_t> const& a, vector<uint8_t> const& b);
 
-    static inline vector<uint8_t> sFunc(const vector<uint8_t>& a);
-    static inline vector<uint8_t> sFuncInv(const vector<uint8_t>& a);
+    static inline vector<uint8_t> sFunc(vector<uint8_t> const& a);
+    static inline vector<uint8_t> sFuncInv(vector<uint8_t> const& a);
 
-    static inline vector<uint8_t> rFunc(const vector<uint8_t>& a);
-    static inline vector<uint8_t> rFuncInv(const vector<uint8_t>& a);
+    static inline vector<uint8_t> rFunc(vector<uint8_t> const& a);
+    static inline vector<uint8_t> rFuncInv(vector<uint8_t> const& a);
 
-    static inline vector<uint8_t> lFunc(const vector<uint8_t>& a);
-    static inline vector<uint8_t> lFuncInv(const vector<uint8_t>& a);
+    static inline vector<uint8_t> lFunc(vector<uint8_t> const& a);
+    static inline vector<uint8_t> lFuncInv(vector<uint8_t> const& a);
 
     // boost for L and S Func-s
-    static inline vector<vector<vector<uint8_t>>> genLFuncTable();
-    static inline vector<uint8_t> SLFunc(const vector<uint8_t>& a);
-    static inline vector<vector<vector<uint8_t>>> genLFuncInvTable();
-    static inline vector<uint8_t> LSFunc(const vector<uint8_t>& a);
+    static inline vector<vector<vector<uint8_t>>> genTableFor(Table const& currTable);
+    static inline vector<uint8_t> SLFunc(vector<uint8_t> const& a);
+    static inline vector<uint8_t> LSFunc(vector<uint8_t> const& a);
+    static inline vector<uint8_t> mapping(
+        vector<uint8_t> const& a,
+        vector<vector<vector<uint8_t>>> const& tableRef);
 };
 
 /**
@@ -61,15 +66,15 @@ class Kuznechik {
  * so there is no need to pass IV inside function
  */
 vector<uint8_t> encryptOFB(
-    const vector<uint8_t>& data,
-    const vector<vector<uint8_t>>& keys,
-    const vector<uint8_t>& IV);
-vector<uint8_t> decryptOFB(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+    vector<uint8_t> const& data,
+    vector<vector<uint8_t>> const& keys,
+    vector<uint8_t> const& IV);
+vector<uint8_t> decryptOFB(vector<uint8_t> const& data, vector<vector<uint8_t>> const& keys);
 
 vector<uint8_t> encryptCBC(
-    const vector<uint8_t>& data,
-    const vector<vector<uint8_t>>& keys,
-    const vector<uint8_t>& IV);
-vector<uint8_t> decryptCBC(const vector<uint8_t>& data, const vector<vector<uint8_t>>& keys);
+    vector<uint8_t> const& data,
+    vector<vector<uint8_t>> const& keys,
+    vector<uint8_t> const& IV);
+vector<uint8_t> decryptCBC(vector<uint8_t> const& data, vector<vector<uint8_t>> const& keys);
 
 #endif

@@ -17,7 +17,7 @@ class Logger {
     ofstream* file;  // file where logs will be written
     bool quietMod;   // true - logs to console, else - not
     
-    static inline string bytesToString(const vector<uint8_t>& logs);
+    static inline string bytesToString(vector<uint8_t> const& logs);
 };
 
 #endif

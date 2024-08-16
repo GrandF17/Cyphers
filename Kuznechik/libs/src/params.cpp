@@ -8,7 +8,7 @@
 using namespace std;
 
 size_t ProgramParams::paramIndex(int argc, char** argv, regex pattern) {
-    for (size_t i = 0; i < argc; i++) {
+    for (size_t i = 0; i < static_cast<size_t>(argc); i++) {
         string str = argv[i];
         if (regex_match(str, pattern)) return i;
     }
