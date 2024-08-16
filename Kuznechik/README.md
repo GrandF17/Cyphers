@@ -33,18 +33,19 @@ In this repository you can find the file `1048576.key`. This sequence of bits wa
 You can find out these tests
 <a href="https://github.com/terrillmoore/NIST-Statistical-Test-Suite" target="_blank">here</a>.
 
-## LINUX
+## LINUX 
+### gcc version 11.4.0
 
 Compile:
 
 ```
-g++ ./main.cpp libs/kuznechik.cpp libs/md5.cpp  -o main -pthread
+make -f makefile.mk
 ```
 
 Example how to run:
 
 ```
-./main --k="1048576.key" --o="0" --l="log.txt" --f="./kek.txt" --mode="2" --checksum="0"
+./main -k="1048576.key" -o="0" -l="log.txt" --f="./kek.txt" -mode="2" -rc="0"
 ```
 
 ### P.S. Can be run only on Unix OSs
